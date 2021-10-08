@@ -1,0 +1,3 @@
+rootProject.name = "Merlin Android"
+include ':app'
+include ':merlin'
