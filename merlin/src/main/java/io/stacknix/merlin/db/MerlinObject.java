@@ -1,6 +1,5 @@
 package io.stacknix.merlin.db;
 
-import io.stacknix.merlin.db.annotations.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +8,7 @@ import java.util.Collections;
 import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Internal;
 import io.stacknix.merlin.db.annotations.Model;
+import io.stacknix.merlin.db.annotations.PrimaryKey;
 
 public abstract class MerlinObject {
     @PrimaryKey

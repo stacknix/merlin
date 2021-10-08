@@ -43,5 +43,5 @@ dependencies {
     //java
     implementation 'org.jetbrains:annotations:16.0.2'
     implementation 'com.google.guava:guava:31.0.1-jre'
-    api 'com.github.stacknix:merlin-annotations-0.0.1'
+    api 'com.github.stacknix:merlin-annotations:0.0.1'
 }
