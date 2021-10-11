@@ -4,15 +4,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Pair;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import io.stacknix.merlin.db.DBAdapter;
@@ -106,7 +110,17 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         String primaryKey = MerlinObject.getPrimaryKey(tClass);
         String sortKey = MerlinObject.getSortKey(tClass);
         String sortOrder = String.format("%s DESC", sortKey);
-        Cursor cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
+        Map<String, Object> sqlMap = query.toSQL();
+        String sql = (String) sqlMap.get("sql");
+        // Todo
+        @SuppressWarnings("unchecked")
+        String[] selectionArgs = (String[]) ((List<String>) Objects.requireNonNull(sqlMap.get("args"))).toArray();
+        Cursor cursor;
+        if(sql == null) {
+            cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
+        }else {
+            cursor = getDatabase().rawQuery(sql, selectionArgs);
+        }
         MerlinResult<T> data = new MerlinResult<>(query);
         FieldInfo[] fieldInfo = factory.getFields(tClass);
         while (cursor.moveToNext()) {

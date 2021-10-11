@@ -1,5 +1,6 @@
 package io.stacknix.merlin.db.commons;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
@@ -28,6 +29,15 @@ public class Utils {
         Collections.addAll(resultList, array2);
         T[] resultArray = (T[]) Array.newInstance(Objects.requireNonNull(array1.getClass().getComponentType()), 0);
         return resultList.toArray(resultArray);
+    }
+
+    @Contract(pure = true)
+    public static String @NotNull [] cloneArray(String seed, int size) {
+        String[] array = new String[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = seed;
+        }
+        return array;
     }
 
 }
