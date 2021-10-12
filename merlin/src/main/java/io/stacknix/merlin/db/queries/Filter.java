@@ -1,16 +1,9 @@
 package io.stacknix.merlin.db.queries;
 
-import android.util.Pair;
-
-import com.google.common.base.Joiner;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Filter {
 
