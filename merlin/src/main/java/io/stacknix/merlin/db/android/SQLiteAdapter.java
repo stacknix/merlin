@@ -116,7 +116,7 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         if(sb.getSQL() == null) {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
         }else {
-            cursor = getDatabase().rawQuery(sb.getSQL(), sb.getSelectionArgs());
+            cursor = getDatabase().rawQuery(String.format("SELECT * FROM %s WHERE %s", tableName, sb.getSQL()), sb.getSelectionArgs());
         }
         MerlinResult<T> data = new MerlinResult<>(query);
         FieldInfo[] fieldInfo = factory.getFields(tClass);

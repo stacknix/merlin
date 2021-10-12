@@ -37,13 +37,19 @@ public class Condition {
         } else if (val instanceof String) {
             output = output.replaceFirst("\\?", String.format("'%s'", q));
             selectionsArgs.add(String.format("'%s'", val));
-        } else if (val instanceof Integer[]) {
+        } else if (val instanceof Short[]) {
+            String str = Joiner.on(", ").join(Utils.cloneArray(q, ((Short[]) val).length));
+            output = output.replaceFirst("\\?", String.format("(%s)", str));
+            for (Object item : (Object[]) val) {
+                selectionsArgs.add(String.valueOf(item));
+            }
+        }  else if (val instanceof Integer[]) {
             String str = Joiner.on(", ").join(Utils.cloneArray(q, ((Integer[]) val).length));
             output = output.replaceFirst("\\?", String.format("(%s)", str));
             for (Object item : (Object[]) val) {
                 selectionsArgs.add(String.valueOf(item));
             }
-        } else if (val instanceof Long[]) {
+        }else if (val instanceof Long[]) {
             String str = Joiner.on(", ").join(Utils.cloneArray(q, ((Long[]) val).length));
             output = output.replaceFirst("\\?", String.format("(%s)", str));
             for (Object item : (Object[]) val) {

@@ -1,11 +1,11 @@
 package io.stacknix.merlin.android.demo
 
-import com.google.gson.Gson
+import io.stacknix.merlin.db.MerlinObject
+import io.stacknix.merlin.db.MerlinQuery
 import io.stacknix.merlin.db.queries.Filter
 import io.stacknix.merlin.db.queries.SQLBuilder
 import org.junit.Before
 import org.junit.Test
-import java.util.*
 
 class FilterTest {
 
@@ -20,7 +20,7 @@ class FilterTest {
 
     @Before
     fun setup() {
-        filter = Filter()
+        filter = MerlinQuery<MerlinObject>(null);
     }
 
     @Test
@@ -53,7 +53,7 @@ class FilterTest {
             .`in`("id", arrayOf(6L, 8L))
             .notEqual(NAME, JERRY)
             .beginGroup()
-            .equal(AGE, null)
+            .isNull(AGE)
             .and()
             .notEqual("age", 45)
             .notEqual(EMAIL, TEST_EMAIL)

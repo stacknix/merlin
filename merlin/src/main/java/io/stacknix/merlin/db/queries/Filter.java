@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class Filter {
 
     private final List<Object> data;
@@ -30,36 +32,223 @@ public class Filter {
         }
     }
 
-    public Filter equal(String key, String val) {
+    public Filter isNull(String key) {
         ensureBasic();
-        if (val != null) {
-            this.data.add(new Condition(key, Substitute.EQUAL, val));
-        } else {
-            this.data.add(new NullCondition(key, Substitute.IS_NULL));
-        }
+        this.data.add(new NullCondition(key, Substitute.IS_NULL));
         return this;
     }
 
-    public Filter notEqual(String key, String val) {
+    public Filter isNotNull(String key) {
         ensureBasic();
-        if (val != null) {
-            this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
-        } else {
-            this.data.add(new NullCondition(key, Substitute.IS_NOT_NULL));
-        }
+        this.data.add(new NullCondition(key, Substitute.IS_NOT_NULL));
         return this;
     }
 
-    public Filter equal(String key, int val) {
+    public Filter equal(String key, @NotNull String val) {
         ensureBasic();
         this.data.add(new Condition(key, Substitute.EQUAL, val));
         return this;
+    }
+
+    public Filter notEqual(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
+        return this;
+    }
+
+    public void equal(String key, short val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.EQUAL, val));
+    }
+
+    public void notEqual(String key, short val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
+    }
+
+    public void equal(String key, int val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.EQUAL, val));
     }
 
     public Filter notEqual(String key, int val) {
         ensureBasic();
         this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
         return this;
+    }
+
+    public void equal(String key, long val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.EQUAL, val));
+    }
+
+    public void notEqual(String key, long val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
+    }
+
+    public void equal(String key, float val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.EQUAL, val));
+    }
+
+    public void notEqual(String key, float val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
+    }
+
+    public void equal(String key, double val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.EQUAL, val));
+    }
+
+    public void notEqual(String key, double val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
+    }
+
+    public void equal(String key, boolean val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.EQUAL, val));
+    }
+
+    public void notEqual(String key, boolean val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.NOT_EQUAL, val));
+    }
+
+    public void gt(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN, val));
+    }
+
+    public void gt(String key, short val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN, val));
+    }
+
+    public void gt(String key, int val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN, val));
+    }
+
+    public void gt(String key, long val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN, val));
+    }
+
+    public void gt(String key, float val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN, val));
+    }
+
+    public void gt(String key, double val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN, val));
+    }
+
+    public void gte(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN_EQUAL, val));
+    }
+
+    public void gte(String key, short val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN_EQUAL, val));
+    }
+
+    public void gte(String key, int val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN_EQUAL, val));
+    }
+
+    public void gte(String key, long val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN_EQUAL, val));
+    }
+
+    public void gte(String key, float val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN_EQUAL, val));
+    }
+
+    public void gte(String key, double val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.GREATER_THAN_EQUAL, val));
+    }
+
+    public void lt(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN, val));
+    }
+
+    public void lt(String key, short val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN, val));
+    }
+
+    public void lt(String key, int val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN, val));
+    }
+
+    public void lt(String key, long val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN, val));
+    }
+
+    public void lt(String key, float val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN, val));
+    }
+
+    public void lt(String key, double val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN, val));
+    }
+
+    public void lte(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN_EQUAL, val));
+    }
+
+    public void lte(String key, short val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN_EQUAL, val));
+    }
+
+    public void lte(String key, int val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN_EQUAL, val));
+    }
+
+    public void lte(String key, long val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN_EQUAL, val));
+    }
+
+    public void lte(String key, float val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN_EQUAL, val));
+    }
+
+    public void lte(String key, double val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LESS_THAN_EQUAL, val));
+    }
+
+    public void in(String key, @NotNull Short @NotNull [] val) {
+        if (val.length != 0) {
+            ensureBasic();
+            this.data.add(new Condition(key, Substitute.IN, val));
+        }
+    }
+
+    public void in(String key, @NotNull Integer @NotNull [] val) {
+        if (val.length != 0) {
+            ensureBasic();
+            this.data.add(new Condition(key, Substitute.IN, val));
+        }
     }
 
     public Filter in(String key, @NotNull Long @NotNull [] val) {
@@ -70,12 +259,48 @@ public class Filter {
         return this;
     }
 
-    public Filter notIn(String key, @NotNull Long @NotNull [] val) {
+    public void in(String key, @NotNull Float @NotNull [] val) {
         if (val.length != 0) {
             ensureBasic();
-            this.data.add(new Condition(key, Substitute.NOT_IN, val));
+            this.data.add(new Condition(key, Substitute.IN, val));
         }
-        return this;
+    }
+
+    public void in(String key, @NotNull Double @NotNull [] val) {
+        if (val.length != 0) {
+            ensureBasic();
+            this.data.add(new Condition(key, Substitute.IN, val));
+        }
+    }
+
+    public void like(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.LIKE, val));
+    }
+
+    public void ilike(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.ILIKE, val));
+    }
+
+    public void startsWith(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.STARTS_WITH, val));
+    }
+
+    public void iStartsWith(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.I_STARTS_WITH, val));
+    }
+
+    public void endsWith(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.ENDS_WITH, val));
+    }
+
+    public void iEndsWith(String key, @NotNull String val) {
+        ensureBasic();
+        this.data.add(new Condition(key, Substitute.I_ENDS_WITH, val));
     }
 
     /*
