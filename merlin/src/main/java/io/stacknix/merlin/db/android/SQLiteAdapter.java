@@ -28,6 +28,7 @@ import io.stacknix.merlin.db.Merlin;
 import io.stacknix.merlin.db.MerlinObject;
 import io.stacknix.merlin.db.MerlinQuery;
 import io.stacknix.merlin.db.MerlinResult;
+import io.stacknix.merlin.db.queries.SQLBuilder;
 
 public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
 
@@ -110,16 +111,12 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         String primaryKey = MerlinObject.getPrimaryKey(tClass);
         String sortKey = MerlinObject.getSortKey(tClass);
         String sortOrder = String.format("%s DESC", sortKey);
-        Map<String, Object> sqlMap = query.toSQL();
-        String sql = (String) sqlMap.get("sql");
-        // Todo
-        @SuppressWarnings("unchecked")
-        String[] selectionArgs = (String[]) ((List<String>) Objects.requireNonNull(sqlMap.get("args"))).toArray();
+        SQLBuilder sb = new SQLBuilder(query);
         Cursor cursor;
-        if(sql == null) {
+        if(sb.getSQL() == null) {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
         }else {
-            cursor = getDatabase().rawQuery(sql, selectionArgs);
+            cursor = getDatabase().rawQuery(sb.getSQL(), sb.getSelectionArgs());
         }
         MerlinResult<T> data = new MerlinResult<>(query);
         FieldInfo[] fieldInfo = factory.getFields(tClass);

@@ -2,8 +2,10 @@ package io.stacknix.merlin.android.demo
 
 import com.google.gson.Gson
 import io.stacknix.merlin.db.queries.Filter
+import io.stacknix.merlin.db.queries.SQLBuilder
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
 class FilterTest {
 
@@ -62,9 +64,8 @@ class FilterTest {
     private fun run(shouldSuccess: Boolean){
         try {
             filter.build()
-            val map = filter.toSQL();
-            println(map["sql"])
-            println(map["args"])
+            val sb = SQLBuilder(filter)
+            println(sb.sql)
             assert(shouldSuccess)
         } catch (e: RuntimeException) {
             e.printStackTrace()

@@ -160,31 +160,4 @@ public class Filter {
         return data;
     }
 
-    public Map<String, Object> toSQL() {
-        List<String> selectionArgs = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("sql", objectsToSQL(build(), selectionArgs));
-        map.put("args", selectionArgs);
-        return map;
-    }
-
-    @SuppressWarnings("unchecked")
-    private @Nullable String objectsToSQL(@NotNull List<Object> buildObject, List<String> selectionArgs) {
-        if (!buildObject.isEmpty()) {
-            List<String> strings = new ArrayList<>();
-            for (Object obj : buildObject) {
-                if (obj instanceof List) {
-                    strings.add(String.format("(%s)", objectsToSQL((List<Object>) obj, selectionArgs)));
-                }else if (obj instanceof Condition) {
-                    strings.add(obj.toString());
-                    selectionArgs.addAll(((Condition) obj).getSelectionsArgs());
-                }else {
-                    strings.add(obj.toString());
-                }
-            }
-            return Joiner.on(" ").join(strings);
-        }
-        return null;
-    }
-
 }
