@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import io.stacknix.merlin.db.queries.Filter;
 
-public class MerlinQuery<T extends MerlinObject> extends Filter{
+public class MerlinQuery<T extends MerlinObject> extends Filter {
 
     private final Class<T> tClass;
 
@@ -13,11 +13,11 @@ public class MerlinQuery<T extends MerlinObject> extends Filter{
         this.tClass = tClass;
     }
 
-    public Class<T> getObjectClass(){
+    public Class<T> getObjectClass() {
         return tClass;
     }
 
-    public MerlinResult<T> find(){
+    public MerlinResult<T> find() {
         return Merlin.getInstance().db().search(this);
     }
 
@@ -46,18 +46,21 @@ public class MerlinQuery<T extends MerlinObject> extends Filter{
     }
 
     @Override
-    public void equal(String key, short val) {
+    public MerlinQuery<T> equal(String key, short val) {
         super.equal(key, val);
+        return this;
     }
 
     @Override
-    public void notEqual(String key, short val) {
+    public MerlinQuery<T> notEqual(String key, short val) {
         super.notEqual(key, val);
+        return this;
     }
 
     @Override
-    public void equal(String key, int val) {
+    public MerlinQuery<T> equal(String key, int val) {
         super.equal(key, val);
+        return this;
     }
 
     @Override
@@ -67,219 +70,327 @@ public class MerlinQuery<T extends MerlinObject> extends Filter{
     }
 
     @Override
-    public void equal(String key, long val) {
+    public MerlinQuery<T> equal(String key, long val) {
         super.equal(key, val);
+        return this;
     }
 
     @Override
-    public void notEqual(String key, long val) {
+    public MerlinQuery<T> notEqual(String key, long val) {
         super.notEqual(key, val);
+        return this;
     }
 
     @Override
-    public void equal(String key, float val) {
+    public MerlinQuery<T> equal(String key, float val) {
         super.equal(key, val);
+        return this;
     }
 
     @Override
-    public void notEqual(String key, float val) {
+    public MerlinQuery<T> notEqual(String key, float val) {
         super.notEqual(key, val);
+        return this;
     }
 
     @Override
-    public void equal(String key, double val) {
+    public MerlinQuery<T> equal(String key, double val) {
         super.equal(key, val);
+        return this;
     }
 
     @Override
-    public void notEqual(String key, double val) {
+    public MerlinQuery<T> notEqual(String key, double val) {
         super.notEqual(key, val);
+        return this;
     }
 
     @Override
-    public void equal(String key, boolean val) {
+    public MerlinQuery<T> equal(String key, boolean val) {
         super.equal(key, val);
+        return this;
     }
 
     @Override
-    public void notEqual(String key, boolean val) {
+    public MerlinQuery<T> notEqual(String key, boolean val) {
         super.notEqual(key, val);
+        return this;
     }
 
     @Override
-    public void gt(String key, @NotNull String val) {
+    public MerlinQuery<T> gt(String key, @NotNull String val) {
         super.gt(key, val);
+        return this;
     }
 
     @Override
-    public void gt(String key, short val) {
+    public MerlinQuery<T> gt(String key, short val) {
         super.gt(key, val);
+        return this;
     }
 
     @Override
-    public void gt(String key, int val) {
+    public MerlinQuery<T> gt(String key, int val) {
         super.gt(key, val);
+        return this;
     }
 
     @Override
-    public void gt(String key, long val) {
+    public MerlinQuery<T> gt(String key, long val) {
         super.gt(key, val);
+        return this;
     }
 
     @Override
-    public void gt(String key, float val) {
+    public MerlinQuery<T> gt(String key, float val) {
         super.gt(key, val);
+        return this;
     }
 
     @Override
-    public void gt(String key, double val) {
+    public MerlinQuery<T> gt(String key, double val) {
         super.gt(key, val);
+        return this;
     }
 
     @Override
-    public void gte(String key, @NotNull String val) {
+    public MerlinQuery<T> gte(String key, @NotNull String val) {
         super.gte(key, val);
+        return this;
     }
 
     @Override
-    public void gte(String key, short val) {
+    public MerlinQuery<T> gte(String key, short val) {
         super.gte(key, val);
+        return this;
     }
 
     @Override
-    public void gte(String key, int val) {
+    public MerlinQuery<T> gte(String key, int val) {
         super.gte(key, val);
+        return this;
     }
 
     @Override
-    public void gte(String key, long val) {
+    public MerlinQuery<T> gte(String key, long val) {
         super.gte(key, val);
+        return this;
     }
 
     @Override
-    public void gte(String key, float val) {
+    public MerlinQuery<T> gte(String key, float val) {
         super.gte(key, val);
+        return this;
     }
 
     @Override
-    public void gte(String key, double val) {
+    public MerlinQuery<T> gte(String key, double val) {
         super.gte(key, val);
+        return this;
     }
 
     @Override
-    public void lt(String key, @NotNull String val) {
+    public MerlinQuery<T> lt(String key, @NotNull String val) {
         super.lt(key, val);
+        return this;
     }
 
     @Override
-    public void lt(String key, short val) {
+    public MerlinQuery<T> lt(String key, short val) {
         super.lt(key, val);
+        return this;
     }
 
     @Override
-    public void lt(String key, int val) {
+    public MerlinQuery<T> lt(String key, int val) {
         super.lt(key, val);
+        return this;
     }
 
     @Override
-    public void lt(String key, long val) {
+    public MerlinQuery<T> lt(String key, long val) {
         super.lt(key, val);
+        return this;
     }
 
     @Override
-    public void lt(String key, float val) {
+    public MerlinQuery<T> lt(String key, float val) {
         super.lt(key, val);
+        return this;
     }
 
     @Override
-    public void lt(String key, double val) {
+    public MerlinQuery<T> lt(String key, double val) {
         super.lt(key, val);
+        return this;
     }
 
     @Override
-    public void lte(String key, @NotNull String val) {
+    public MerlinQuery<T> lte(String key, @NotNull String val) {
         super.lte(key, val);
+        return this;
     }
 
     @Override
-    public void lte(String key, short val) {
+    public MerlinQuery<T> lte(String key, short val) {
         super.lte(key, val);
+        return this;
     }
 
     @Override
-    public void lte(String key, int val) {
+    public MerlinQuery<T> lte(String key, int val) {
         super.lte(key, val);
+        return this;
     }
 
     @Override
-    public void lte(String key, long val) {
+    public MerlinQuery<T> lte(String key, long val) {
         super.lte(key, val);
+        return this;
     }
 
     @Override
-    public void lte(String key, float val) {
+    public MerlinQuery<T> lte(String key, float val) {
         super.lte(key, val);
+        return this;
     }
 
     @Override
-    public void lte(String key, double val) {
+    public MerlinQuery<T> lte(String key, double val) {
         super.lte(key, val);
+        return this;
     }
 
     @Override
-    public void in(String key, @NotNull Short @NotNull [] val) {
+    public MerlinQuery<T> in(String key, @NotNull Short @NotNull [] val) {
         super.in(key, val);
+        return this;
     }
 
     @Override
-    public void in(String key, @NotNull Integer @NotNull [] val) {
-         super.in(key, val);
+    public MerlinQuery<T> notIn(String key, @NotNull Short @NotNull [] val) {
+        super.notIn(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> in(String key, @NotNull Integer @NotNull [] val) {
+        super.in(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> notIn(String key, @NotNull Integer @NotNull [] val) {
+        super.notIn(key, val);
+        return this;
     }
 
     @Override
     public MerlinQuery<T> in(String key, @NotNull Long @NotNull [] val) {
-         super.in(key, val);
-         return this;
-    }
-
-    @Override
-    public void in(String key, @NotNull Float @NotNull [] val) {
         super.in(key, val);
+        return this;
     }
 
     @Override
-    public void in(String key, @NotNull Double @NotNull [] val) {
+    public MerlinQuery<T> notIn(String key, @NotNull Long @NotNull [] val) {
+        super.notIn(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> in(String key, @NotNull Float @NotNull [] val) {
         super.in(key, val);
+        return this;
     }
 
     @Override
-    public void like(String key, @NotNull String val) {
+    public MerlinQuery<T> notIn(String key, @NotNull Float @NotNull [] val) {
+        super.notIn(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> in(String key, @NotNull Double @NotNull [] val) {
+        super.in(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> notIn(String key, @NotNull Double @NotNull [] val) {
+        super.notIn(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> like(String key, @NotNull String val) {
         super.like(key, val);
+        return this;
     }
 
     @Override
-    public void ilike(String key, @NotNull String val) {
+    public MerlinQuery<T> notLike(String key, @NotNull String val) {
+        super.notLike(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> ilike(String key, @NotNull String val) {
         super.ilike(key, val);
+        return this;
     }
 
     @Override
-    public void startsWith(String key, @NotNull String val) {
+    public MerlinQuery<T> notIlike(String key, @NotNull String val) {
+        super.notIlike(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> startsWith(String key, @NotNull String val) {
         super.startsWith(key, val);
+        return this;
     }
 
     @Override
-    public void iStartsWith(String key, @NotNull String val) {
+    public MerlinQuery<T> notStartsWith(String key, @NotNull String val) {
+        super.notStartsWith(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> iStartsWith(String key, @NotNull String val) {
         super.iStartsWith(key, val);
+        return this;
     }
 
     @Override
-    public void endsWith(String key, @NotNull String val) {
+    public MerlinQuery<T> notIStartsWith(String key, @NotNull String val) {
+        super.notIStartsWith(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> endsWith(String key, @NotNull String val) {
         super.endsWith(key, val);
+        return this;
     }
 
     @Override
-    public void iEndsWith(String key, @NotNull String val) {
+    public MerlinQuery<T> notEndsWith(String key, @NotNull String val) {
+        super.notEndsWith(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> iEndsWith(String key, @NotNull String val) {
         super.iEndsWith(key, val);
+        return this;
+    }
+
+    @Override
+    public MerlinQuery<T> notIEndsWith(String key, @NotNull String val) {
+        super.notIEndsWith(key, val);
+        return this;
     }
 
     @Override

@@ -21,20 +21,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var i: Long = 0;
         binding.addData.setOnClickListener {
+            i++
             val product = Product()
             product.name = "Something"
+            product.id = i;
             product.save()
         }
-        binding.addData.performClick()
 
-        val result = Merlin.where(Product::class.java).find()
+        val result = Merlin.where(Product::class.java)
+            .equal("name", "Something")
+            .notIn("id", arrayOf<Long>(2L, 7L))
+            .find()
         binding.recyclerView.adapter = ProductAdapter(result)
-
-        val s = assets.list("")
-        for (i in s!!){
-            Log.i("===", i)
-        }
 
     }
 }
@@ -47,7 +47,7 @@ internal class ProductAdapter(result: MerlinResult<Product>): RecyclerAdapter<It
 
     override fun onBind(binding: ItemProductViewBinding, item: Product) {
         with(binding){
-            itemTitle.text = item.name
+            itemTitle.text = item.name+":"+item.id
         }
     }
 

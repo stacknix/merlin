@@ -10,5 +10,4 @@ public class Product extends MerlinObject {
     public String tag;
     public String name;
     public long id;
-    public float price;
 }

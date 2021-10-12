@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Looper;
+import android.util.Log;
 import android.util.Pair;
 
 import com.google.common.base.Joiner;
@@ -116,7 +118,11 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         if(sb.getSQL() == null) {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
         }else {
-            cursor = getDatabase().rawQuery(String.format("SELECT * FROM %s WHERE %s", tableName, sb.getSQL()), sb.getSelectionArgs());
+            String simple = String.format("SELECT * FROM %s WHERE %s", tableName, sb.getSQL());
+            Logging.e("==", simple);
+            for(Object item: sb.getSelectionArgs())
+                Logging.e("==", item);
+            cursor = getDatabase().rawQuery(simple, sb.getSelectionArgs());
         }
         MerlinResult<T> data = new MerlinResult<>(query);
         FieldInfo[] fieldInfo = factory.getFields(tClass);

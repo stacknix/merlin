@@ -62,5 +62,6 @@ dependencies {
 
 
     implementation project(path: ':merlin')
+    kapt 'com.github.stacknix:merlin-compiler:0.0.2'
 
 }
