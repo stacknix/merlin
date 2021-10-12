@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val result = Merlin.where(Product::class.java)
             .equal("name", "Something")
-            .notIn("id", arrayOf<Long>(2L, 7L))
+            .notIn("id", arrayOf(2L, 7L))
             .find()
         binding.recyclerView.adapter = ProductAdapter(result)
 

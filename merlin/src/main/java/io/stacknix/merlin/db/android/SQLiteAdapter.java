@@ -115,13 +115,11 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         String sortOrder = String.format("%s DESC", sortKey);
         SQLBuilder sb = new SQLBuilder(query);
         Cursor cursor;
-        if(sb.getSQL() == null) {
+        if (sb.getSQL() == null) {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
-        }else {
+        } else {
             String simple = String.format("SELECT * FROM %s WHERE %s", tableName, sb.getSQL());
-            Logging.e("==", simple);
-            for(Object item: sb.getSelectionArgs())
-                Logging.e("==", item);
+            Logging.i(TAG, simple);
             cursor = getDatabase().rawQuery(simple, sb.getSelectionArgs());
         }
         MerlinResult<T> data = new MerlinResult<>(query);
@@ -193,13 +191,13 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         return data;
     }
 
-    private int getCheapDBVersion(List<String> createTableSQList){
+    private int getCheapDBVersion(List<String> createTableSQList) {
         Preferences pref = new Preferences(context);
         String TAG = "SQLITE_SCHEMA_HASH";
         int dbVersion = Settings.getDBVersion(context);
         int oldHash = pref.getInt(TAG, 0);
         int newHash = Joiner.on("").join(createTableSQList).hashCode();
-        if(oldHash != newHash){
+        if (oldHash != newHash) {
             dbVersion++;
             Settings.setDBVersion(context, dbVersion);
             pref.setInt(TAG, newHash);
