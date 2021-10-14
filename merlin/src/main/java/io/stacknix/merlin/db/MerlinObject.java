@@ -22,10 +22,6 @@ public abstract class MerlinObject {
     public String uuid;
 
     @Internal
-    @SortKey(Order.DESC)
-    public long _timestamp;
-
-    @Internal
     public int _flag;
 
     // todo
@@ -77,8 +73,7 @@ public abstract class MerlinObject {
                 return new Pair<>(field.getName(), sortKey.value());
             }
         }
-        assert false;
-        return null;
+        return new Pair<>(getPrimaryKey(tClass), Order.DESC);
     }
 
     public String getPrimaryValue() {

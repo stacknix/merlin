@@ -47,11 +47,9 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     protected <T extends MerlinObject> void onCreate(Class<T> tClass, @NotNull List<MerlinObject> objects) {
         String tableName = MerlinObject.getTableName(tClass);
         String primaryKey = MerlinObject.getPrimaryKey(tClass);
-        String sortKey = MerlinObject.getSortKey(tClass).first;
         for (MerlinObject item : objects) {
             ContentValues values = Utils.mapToContentValues(factory.getValues(item));
             values.put(primaryKey, UUID.randomUUID().toString());
-            values.put(sortKey, System.currentTimeMillis());
             long insertIndex = getDatabase().insert(tableName, null, values);
             Logging.i(TAG, insertIndex);
         }

@@ -72,7 +72,6 @@ public abstract class MerlinService<T extends MerlinObject> {
     }
 
     private void localize(@NotNull T item, @NotNull T cacheItem) {
-        item._timestamp = cacheItem._timestamp;
         item._flag = cacheItem._flag;
     }
 
