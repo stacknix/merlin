@@ -32,11 +32,8 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         }
     }
 
-    //Todo
     @SuppressWarnings("unchecked")
     public void deleteAll() {
-        if (!isEmpty()) {
-            Merlin.getInstance().db().unlink(query.getObjectClass(), (List<MerlinObject>) this);
-        }
+        Merlin.getInstance().db().delete(query.getObjectClass(), (List<MerlinObject>) this);
     }
 }
