@@ -89,9 +89,9 @@ public abstract class MerlinService<T extends MerlinObject> {
 
     public void performSearch(Context context, MerlinQuery<T> query) throws Exception {
         DBAdapter<?> db = Merlin.getInstance().db();
-        List<T> local = db.search(query);
-        List<T> remote = onSearch(context, query);
-        ResultCompare<T> result = new ResultCompare<>(local, remote);
+        List<T> localList = db.search(query);
+        List<T> remoteList = onSearch(context, query);
+        ResultCompare<T> result = new ResultCompare<>(localList, remoteList);
         db.delete(tClass, result.getDeleteData());
         db.write(tClass, result.getWriteData());
         db.create(tClass, result.getCreateData());

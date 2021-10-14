@@ -15,14 +15,14 @@ public class ResultCompare<T extends MerlinObject> {
     private final List<T> deleteData;
 
 
-    public ResultCompare(@NotNull List<T> firstList, @NotNull List<T> secondList) {
+    public ResultCompare(@NotNull List<T> localList, @NotNull List<T> remoteList) {
         this.writeData = new ArrayList<>();
         this.createData = new ArrayList<>();
         this.deleteData = new ArrayList<>();
 
-        for (T secondItem : secondList) {
+        for (T secondItem : localList) {
             boolean isContain = false;
-            for (MerlinObject firstItem : firstList) {
+            for (MerlinObject firstItem : remoteList) {
                 if (secondItem.areItemsTheSame(firstItem)) {
                     isContain = true;
                     break;
@@ -32,17 +32,17 @@ public class ResultCompare<T extends MerlinObject> {
                 deleteData.add(secondItem);
             }
         }
-        for (T firstItem : firstList) {
-            for (MerlinObject secondItem : secondList) {
+        for (T firstItem : remoteList) {
+            for (MerlinObject secondItem : localList) {
                 if (firstItem.areItemsTheSame(secondItem)) {
                     writeData.add(firstItem);
                     break;
                 }
             }
         }
-        for (T firstItem : firstList) {
+        for (T firstItem : remoteList) {
             boolean isContain = false;
-            for (MerlinObject secondItem : secondList) {
+            for (MerlinObject secondItem : localList) {
                 if (firstItem.areItemsTheSame(secondItem)) {
                     isContain = true;
                     break;
