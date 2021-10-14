@@ -24,7 +24,9 @@ import io.stacknix.merlin.db.Merlin;
 import io.stacknix.merlin.db.MerlinObject;
 import io.stacknix.merlin.db.MerlinQuery;
 import io.stacknix.merlin.db.MerlinResult;
+import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.commons.FieldInfo;
+import io.stacknix.merlin.db.commons.Pair;
 import io.stacknix.merlin.db.queries.SQLBuilder;
 
 public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
@@ -45,7 +47,7 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     protected <T extends MerlinObject> void onCreate(Class<T> tClass, @NotNull List<MerlinObject> objects) {
         String tableName = MerlinObject.getTableName(tClass);
         String primaryKey = MerlinObject.getPrimaryKey(tClass);
-        String sortKey = MerlinObject.getSortKey(tClass);
+        String sortKey = MerlinObject.getSortKey(tClass).first;
         for (MerlinObject item : objects) {
             ContentValues values = Utils.mapToContentValues(factory.getValues(item));
             values.put(primaryKey, UUID.randomUUID().toString());
@@ -59,9 +61,10 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     @Override
     protected <T extends MerlinObject> void onWrite(Class<T> tClass, @NotNull List<MerlinObject> objects) {
         String tableName = MerlinObject.getTableName(tClass);
+        String primaryKey = MerlinObject.getPrimaryKey(tClass);
         for (MerlinObject item : objects) {
-            String selection = String.format("%s = ?", MerlinObject.getPrimaryKey(tClass));
-            String[] selectionArgs = {String.valueOf(item.uuid)};
+            String selection = String.format("%s = ?", primaryKey);
+            String[] selectionArgs = {item.getPrimaryValue()};
             ContentValues values = Utils.mapToContentValues(factory.getValues(item));
             getDatabase().update(tableName, values, selection, selectionArgs);
         }
@@ -76,7 +79,7 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
             String selection = String.format("%s IN (%s)", MerlinObject.getPrimaryKey(tClass), sqlArgs);
             String[] selectionArgs = new String[object.size()];
             for (int i = 0; i < object.size(); i++) {
-                selectionArgs[i] = String.valueOf(object.get(i).uuid);
+                selectionArgs[i] = String.valueOf(object.get(i).getPrimaryValue());
             }
             getDatabase().delete(tableName, selection, selectionArgs);
         }
@@ -84,14 +87,14 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     }
 
     @Override
-    protected <T extends MerlinObject> T onRead(Class<T> tClass, String uuid) {
+    protected <T extends MerlinObject> T onRead(Class<T> tClass, String pk) {
         T instance = null;
         String tableName = MerlinObject.getTableName(tClass);
         String primaryKey = MerlinObject.getPrimaryKey(tClass);
-        String sortKey = MerlinObject.getSortKey(tClass);
+        @NotNull Pair<String, Order> sort = MerlinObject.getSortKey(tClass);
         String selection = String.format("%s = ?", primaryKey);
-        String sortOrder = String.format("%s DESC", sortKey);
-        String[] selectionArgs = {uuid};
+        String sortOrder = String.format("%s %s", sort.first, sort.second.name());
+        String[] selectionArgs = {pk};
         Cursor cursor = getDatabase().query(tableName, null, selection, selectionArgs, null, null, sortOrder);
         FieldInfo[] fieldInfo = factory.getFields(tClass);
         if (cursor.moveToNext()) {
@@ -105,9 +108,8 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     @Override
     protected <T extends MerlinObject> MerlinResult<T> onSearch(Class<T> tClass, MerlinQuery<T> query) {
         String tableName = MerlinObject.getTableName(tClass);
-        String primaryKey = MerlinObject.getPrimaryKey(tClass);
-        String sortKey = MerlinObject.getSortKey(tClass);
-        String sortOrder = String.format("%s DESC", sortKey);
+        @NotNull Pair<String, Order> sort = MerlinObject.getSortKey(tClass);
+        String sortOrder = String.format("%s %s", sort.first, sort.second.name());
         SQLBuilder sb = new SQLBuilder(query);
         Cursor cursor;
         if (sb.getSQL() == null) {

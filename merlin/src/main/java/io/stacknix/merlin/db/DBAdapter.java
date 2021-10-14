@@ -1,8 +1,12 @@
 package io.stacknix.merlin.db;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.stacknix.merlin.db.commons.Flag;
 
 public abstract class DBAdapter<DB> {
 
@@ -14,7 +18,7 @@ public abstract class DBAdapter<DB> {
 
     protected abstract <T extends MerlinObject> void onDelete(Class<T> tClass, List<MerlinObject> objects);
 
-    protected abstract <T extends MerlinObject> T onRead(Class<T> tClass, String uuid) ;
+    protected abstract <T extends MerlinObject> T onRead(Class<T> tClass, String pk) ;
 
     protected abstract <T extends MerlinObject> MerlinResult<T> onSearch(Class<T> tClass, MerlinQuery<T> query);
 
@@ -37,24 +41,25 @@ public abstract class DBAdapter<DB> {
     }
 
     public <T extends MerlinObject> void create(Class<T> tClass, List<MerlinObject> objects) {
-        onCreate(tClass, objects);
+        if(!objects.isEmpty()){
+            onCreate(tClass, objects);
+        }
     }
 
-    public <T extends MerlinObject> void write(Class<T> tClass, List<MerlinObject> objects) {
-        onWrite(tClass, objects);
+    public <T extends MerlinObject> void write(Class<T> tClass, @NotNull List<MerlinObject> objects) {
+        if(!objects.isEmpty()) {
+            onWrite(tClass, objects);
+        }
     }
 
-    public <T extends MerlinObject> void unlink(Class<T> tClass, List<MerlinObject> objects) {
-        List<MerlinObject> mObjects = new ArrayList<>(objects);
-        onWrite(tClass, mObjects);
+    public <T extends MerlinObject> void delete(Class<T> tClass, @NotNull List<MerlinObject> objects) {
+        if(!objects.isEmpty()) {
+            onDelete(tClass, objects);
+        }
     }
 
-    public <T extends MerlinObject> void delete(Class<T> tClass, List<MerlinObject> objects) {
-        onDelete(tClass, objects);
-    }
-
-    public <T extends MerlinObject> T read(Class<T> tClass, String uuid) {
-        return onRead(tClass, uuid);
+    public <T extends MerlinObject> T read(Class<T> tClass, String pk) {
+        return onRead(tClass, pk);
     }
 
     public <T extends MerlinObject> MerlinResult<T> search(MerlinQuery<T> query) {
