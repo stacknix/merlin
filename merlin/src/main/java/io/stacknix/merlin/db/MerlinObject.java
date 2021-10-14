@@ -5,9 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Internal;
 import io.stacknix.merlin.db.annotations.Model;
 import io.stacknix.merlin.db.annotations.Order;
@@ -59,6 +60,16 @@ public abstract class MerlinObject {
         return fields;
     }
 
+    public static <T extends MerlinObject> @NotNull Map<String, Object> getValues(Class<T> tClass, MerlinObject object) {
+        Map<String, Object> values = new HashMap<>();
+        for (FieldInfo info : getFactory().getFields(tClass)) {
+            if (!info.isInternal()) {
+                values.put(info.getName(), getFactory().getValue(object, info.getName()));
+            }
+        }
+        return values;
+    }
+
     public static <T extends MerlinObject> @NotNull Pair<String, Order> getSortKey(@NotNull Class<T> tClass) {
         for (Field field : tClass.getFields()) {
             SortKey sortKey = field.getAnnotation(SortKey.class);
@@ -79,7 +90,7 @@ public abstract class MerlinObject {
     }
 
     public boolean areContentsTheSame(MerlinObject subject) {
-       return getFactory().onCompareObjects(this, subject);
+        return getFactory().onCompareObjects(this, subject);
     }
 
     private boolean isManaged() {
@@ -102,7 +113,7 @@ public abstract class MerlinObject {
         }
     }
 
-    private static MappingFactory getFactory(){
+    private static MappingFactory getFactory() {
         return Merlin.getInstance().getMappingFactory();
     }
 
