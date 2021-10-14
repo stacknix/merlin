@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.stacknix.merlin.db.commons.Pair;
+
 public class SQLBuilder {
 
     private final String sql;
@@ -40,8 +42,9 @@ public class SQLBuilder {
                 if (obj instanceof List) {
                     strings.add(String.format("(%s)", objectsToSQL((List<Object>) obj, selectionArgs)));
                 }else if (obj instanceof Condition) {
-                    strings.add(obj.toString());
-                    selectionArgs.addAll(((Condition) obj).getSelectionsArgs());
+                    Pair<String, List<String>> result = ((Condition) obj).build();
+                    strings.add(result.first);
+                    selectionArgs.addAll(result.second);
                 }else {
                     strings.add(obj.toString());
                 }
@@ -50,7 +53,4 @@ public class SQLBuilder {
         }
         return null;
     }
-
-
-
 }

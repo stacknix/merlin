@@ -4,32 +4,27 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Looper;
-import android.util.Log;
-import android.util.Pair;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import io.stacknix.merlin.db.DBAdapter;
 import io.stacknix.merlin.db.DBOperation;
 import io.stacknix.merlin.db.DatabaseListener;
-import io.stacknix.merlin.db.commons.FieldInfo;
 import io.stacknix.merlin.db.MappingFactory;
 import io.stacknix.merlin.db.Merlin;
 import io.stacknix.merlin.db.MerlinObject;
 import io.stacknix.merlin.db.MerlinQuery;
 import io.stacknix.merlin.db.MerlinResult;
+import io.stacknix.merlin.db.commons.FieldInfo;
 import io.stacknix.merlin.db.queries.SQLBuilder;
 
 public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
@@ -119,7 +114,8 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
         } else {
             String simple = String.format("SELECT * FROM %s WHERE %s", tableName, sb.getSQL());
-            Logging.i(TAG, simple);
+            Logging.i(TAG, "sql:", simple);
+            Logging.i(TAG, "args:", new Gson().toJson(sb.getSelectionArgs()));
             cursor = getDatabase().rawQuery(simple, sb.getSelectionArgs());
         }
         MerlinResult<T> data = new MerlinResult<>(query);
@@ -129,7 +125,6 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
             factory.setValues(Utils.cursorToMap(fieldInfo, cursor), instance);
             data.add(instance);
         }
-        Logging.i(TAG, tableName, primaryKey, data.size());
         cursor.close();
         return data;
     }

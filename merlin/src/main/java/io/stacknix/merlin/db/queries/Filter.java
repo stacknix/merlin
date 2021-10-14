@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("UnusedReturnValue")
 public class Filter {
 
     private final List<Object> data;
@@ -353,73 +354,73 @@ public class Filter {
 
     public Filter like(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.LIKE, val));
+        this.data.add(new Condition(key, Substitute.LIKE, String.format("%%%s%%", val)));
         return this;
     }
 
     public Filter notLike(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.NOT_LIKE, val));
+        this.data.add(new Condition(key, Substitute.NOT_LIKE, String.format("%%%s%%", val)));
         return this;
     }
 
     public Filter ilike(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.ILIKE, val));
+        this.data.add(new Condition(key, Substitute.ILIKE, String.format("%%%s%%", val)));
         return this;
     }
 
     public Filter notIlike(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.NOT_ILIKE, val));
+        this.data.add(new Condition(key, Substitute.NOT_ILIKE, String.format("%%%s%%", val)));
         return this;
     }
 
     public Filter startsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.STARTS_WITH, val));
+        this.data.add(new Condition(key, Substitute.LIKE, String.format("%s%%", val)));
         return this;
     }
 
     public Filter notStartsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.NOT_STARTS_WITH, val));
+        this.data.add(new Condition(key, Substitute.NOT_ILIKE, String.format("%s%%", val)));
         return this;
     }
 
     public Filter iStartsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.I_STARTS_WITH, val));
+        this.data.add(new Condition(key, Substitute.ILIKE, String.format("%s%%", val)));
         return this;
     }
 
     public Filter notIStartsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.NOT_I_STARTS_WITH, val));
+        this.data.add(new Condition(key, Substitute.NOT_ILIKE, String.format("%s%%", val)));
         return this;
     }
 
     public Filter endsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.ENDS_WITH, val));
+        this.data.add(new Condition(key, Substitute.LIKE, String.format("%%%s", val)));
         return this;
     }
 
     public Filter notEndsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.NOT_ENDS_WITH, val));
+        this.data.add(new Condition(key, Substitute.LIKE, String.format("%%%s", val)));
         return this;
     }
 
     public Filter iEndsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.I_ENDS_WITH, val));
+        this.data.add(new Condition(key, Substitute.ILIKE, String.format("%%%s", val)));
         return this;
     }
 
     public Filter notIEndsWith(String key, @NotNull String val) {
         ensureBasic();
-        this.data.add(new Condition(key, Substitute.NOT_I_ENDS_WITH, val));
+        this.data.add(new Condition(key, Substitute.ILIKE, String.format("%%%s", val)));
         return this;
     }
 
