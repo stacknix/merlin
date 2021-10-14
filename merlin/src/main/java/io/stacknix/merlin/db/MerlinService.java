@@ -4,16 +4,15 @@ import android.content.Context;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.commons.Flag;
 import io.stacknix.merlin.db.commons.RecordNotFound;
+import io.stacknix.merlin.db.commons.ResultCompare;
 
-@SuppressWarnings({"UnusedReturnValue", "unused", "unchecked"})
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public abstract class MerlinService<T extends MerlinObject> {
 
     private final Class<T> tClass;
@@ -78,33 +77,24 @@ public abstract class MerlinService<T extends MerlinObject> {
     }
 
     public void performRead(Context context, String pk) throws Exception {
-        T item = onRead(context, pk);
+        T remoteItem = onRead(context, pk);
         DBAdapter<?> db = Merlin.getInstance().db();
-        T cacheItem = db.read(tClass, item.getPrimaryValue());
-        if (cacheItem != null) {
-            localize(item, cacheItem);
-            db.write(tClass, Collections.singletonList(item));
+        T localItem = db.read(tClass, remoteItem.getPrimaryValue());
+        if (localItem != null) {
+            db.write(tClass, Collections.singletonList(remoteItem));
         } else {
-            db.create(tClass, Collections.singletonList(item));
+            db.create(tClass, Collections.singletonList(remoteItem));
         }
     }
 
     public void performSearch(Context context, MerlinQuery<T> query) throws Exception {
-        List<T> items = onSearch(context, query);
-        List<T> toCreate = new ArrayList<>();
-        List<T> toWrite = new ArrayList<>();
         DBAdapter<?> db = Merlin.getInstance().db();
-        for (T item : items) {
-            T cacheItem = db.read(tClass, item.getPrimaryValue());
-            if (cacheItem != null) {
-                localize(item, cacheItem);
-                toWrite.add(item);
-            } else {
-                toCreate.add(item);
-            }
-        }
-        db.write(tClass, (List<MerlinObject>) toWrite);
-        db.create(tClass, (List<MerlinObject>) toCreate);
+        List<T> local = db.search(query);
+        List<T> remote = onSearch(context, query);
+        ResultCompare<T> result = new ResultCompare<>(local, remote);
+        db.delete(tClass, result.getDeleteData());
+        db.write(tClass, result.getWriteData());
+        db.create(tClass, result.getCreateData());
     }
 
 }
