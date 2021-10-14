@@ -2,12 +2,14 @@ package io.stacknix.merlin.db;
 
 import android.content.Context;
 
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.stacknix.merlin.db.android.SQLiteAdapter;
+import io.stacknix.merlin.db.commons.FieldInfo;
 import io.stacknix.merlin.db.commons.ReflectionFactory;
 
 public class Merlin {
@@ -21,7 +23,7 @@ public class Merlin {
     private final MappingFactory factory;
 
     public static synchronized Merlin getInstance() {
-        if(instance == null){
+        if (instance == null) {
             throw new RuntimeException("Attempt to access objects while Merlin database is not initialized.");
         }
         return instance;
@@ -51,20 +53,21 @@ public class Merlin {
         });
     }
 
-    public MappingFactory getMappingFactory(){
+    public MappingFactory getMappingFactory() {
         return factory;
     }
+
 
     public List<Class<? extends MerlinObject>> getModels() {
         return this.models;
     }
 
-    public DBAdapter<?> db(){
+    public DBAdapter<?> db() {
         return this.db;
     }
 
-    public void listen(DatabaseListener listener){
-        if(!listeners.contains(listener)){
+    public void listen(DatabaseListener listener) {
+        if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
     }

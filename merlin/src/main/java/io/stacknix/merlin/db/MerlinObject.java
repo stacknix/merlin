@@ -3,13 +3,17 @@ package io.stacknix.merlin.db;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Internal;
 import io.stacknix.merlin.db.annotations.Model;
 import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
 import io.stacknix.merlin.db.annotations.SortKey;
+import io.stacknix.merlin.db.commons.FieldInfo;
 import io.stacknix.merlin.db.commons.Pair;
 
 public abstract class MerlinObject {
@@ -23,16 +27,14 @@ public abstract class MerlinObject {
     @Internal
     public int _flag;
 
+    // todo
     public static <T extends MerlinObject> @NotNull String getModelName(@NotNull Class<T> tClass) {
         Model modelName = tClass.getAnnotation(Model.class);
         assert modelName != null;
         return modelName.value();
     }
 
-    public static <T extends MerlinObject> @NotNull String getTableName(@NotNull Class<T> tClass) {
-        return getModelName(tClass).replaceAll("\\.", "_");
-    }
-
+    // todo
     public static <T extends MerlinObject> @NotNull String getPrimaryKey(@NotNull Class<T> tClass) {
         for (Field field : tClass.getFields()) {
             if (field.getAnnotation(PrimaryKey.class) != null) {
@@ -41,6 +43,20 @@ public abstract class MerlinObject {
         }
         assert false;
         return null;
+    }
+
+    public static <T extends MerlinObject> @NotNull String getTableName(@NotNull Class<T> tClass) {
+        return getModelName(tClass).replaceAll("\\.", "_");
+    }
+
+    public static <T extends MerlinObject> @NotNull List<String> getFields(Class<T> tClass) {
+        List<String> fields = new ArrayList<>();
+        for (FieldInfo info : getFactory().getFields(tClass)) {
+            if (!info.isInternal()) {
+                fields.add(info.getName());
+            }
+        }
+        return fields;
     }
 
     public static <T extends MerlinObject> @NotNull Pair<String, Order> getSortKey(@NotNull Class<T> tClass) {
@@ -63,7 +79,7 @@ public abstract class MerlinObject {
     }
 
     public boolean areContentsTheSame(MerlinObject subject) {
-       return Merlin.getInstance().getMappingFactory().onCompareObjects(this, subject);
+       return getFactory().onCompareObjects(this, subject);
     }
 
     private boolean isManaged() {
@@ -86,7 +102,7 @@ public abstract class MerlinObject {
         }
     }
 
-    private MappingFactory getFactory(){
+    private static MappingFactory getFactory(){
         return Merlin.getInstance().getMappingFactory();
     }
 

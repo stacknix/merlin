@@ -13,6 +13,7 @@ import java.util.Objects;
 import io.stacknix.merlin.db.MappingFactory;
 import io.stacknix.merlin.db.MerlinObject;
 import io.stacknix.merlin.db.annotations.Ignore;
+import io.stacknix.merlin.db.annotations.Internal;
 
 public class ReflectionFactory extends MappingFactory {
 
@@ -118,7 +119,7 @@ public class ReflectionFactory extends MappingFactory {
         FieldInfo[] fieldsInfo = new FieldInfo[fields.size()];
         for (int i = 0; i < fieldsInfo.length; i++) {
             Field field = fields.get(i);
-            fieldsInfo[i] = new FieldInfo(field.getName(), field.getType());
+            fieldsInfo[i] = new FieldInfo(field.getName(), field.getType(), field.isAnnotationPresent(Internal.class));
         }
         return fieldsInfo;
     }
