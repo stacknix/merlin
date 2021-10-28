@@ -52,6 +52,7 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
                 throw new MerlinException("Primary key value not given.");
             }
             ContentValues values = Utils.mapToContentValues(factory.getValues(item));
+            Logging.i(TAG, values);
             long insertIndex = getDatabase().insertOrThrow(tableName, null, values);
             Logging.i(TAG, insertIndex);
         }

@@ -13,6 +13,7 @@ import io.stacknix.merlin.android.demo.samples.RecyclerAdapter
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.annotations.Order
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,9 @@ class MainActivity : AppCompatActivity() {
         binding.addData.setOnClickListener {
             val first = Merlin.where(Product::class.java)
                 .sort("id", Order.DESC).first()
+
             val product = Product()
+            product.uuid = UUID.randomUUID().toString()
             product.name = "Something"
             product.id = if (first == null) 1 else first.id + 1
             product.save()

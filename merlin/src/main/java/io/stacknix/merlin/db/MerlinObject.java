@@ -9,19 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Internal;
 import io.stacknix.merlin.db.annotations.Model;
-import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
-import io.stacknix.merlin.db.annotations.SortKey;
 import io.stacknix.merlin.db.commons.FieldInfo;
 import io.stacknix.merlin.db.commons.MerlinException;
-import io.stacknix.merlin.db.commons.Pair;
 
 public abstract class MerlinObject {
 
+    public static final String TAG = "MerlinObject";
+
     @Internal
-    public int _flag;
+    private int _flag;
 
     public static <T extends MerlinObject> @NotNull String getModelName(@NotNull Class<T> tClass) {
         Model modelName = tClass.getAnnotation(Model.class);
@@ -76,21 +76,19 @@ public abstract class MerlinObject {
         return getFactory().onCompareObjects(this, subject);
     }
 
-    private boolean isManaged() {
-        return getPrimaryValue() != null;
-    }
-
     public void save() {
         DBAdapter<?> db = Merlin.getInstance().db();
-        if (!isManaged()) {
+        if (db.read(getClass(), getPrimaryValue()) == null) {
+            Logging.i(TAG, "save", "create");
             db.create(getClass(), Collections.singletonList(this));
         } else {
+            Logging.i(TAG, "save", "write");
             db.write(getClass(), Collections.singletonList(this));
         }
     }
 
     public void delete() {
-        if (isManaged()) {
+        if (getPrimaryValue() != null) {
             DBAdapter<?> db = Merlin.getInstance().db();
             db.delete(getClass(), Collections.singletonList(this));
         }
@@ -99,5 +97,14 @@ public abstract class MerlinObject {
     private static MappingFactory getFactory() {
         return Merlin.getInstance().getMappingFactory();
     }
+
+    public int getFlag() {
+        return this._flag;
+    }
+
+    public void setFlag(int flag) {
+        this._flag = flag;
+    }
+
 
 }

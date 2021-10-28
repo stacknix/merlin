@@ -40,7 +40,7 @@ public abstract class DBAdapter<DB> {
         }
     }
 
-    public <T extends MerlinObject> void create(Class<T> tClass, List<MerlinObject> objects) {
+    public <T extends MerlinObject> void create(Class<T> tClass, @NotNull List<MerlinObject> objects) {
         if(!objects.isEmpty()){
             onCreate(tClass, objects);
         }

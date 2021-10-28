@@ -38,17 +38,17 @@ public abstract class MerlinService<T extends MerlinObject> {
     public synchronized void synchronize(Context context) throws Exception {
         final String TAG = "MerlinService";
         for (T item : Merlin.where(tClass).find()) {
-            switch (item._flag) {
+            switch (item.getFlag()) {
                 case Flag.NEED_CREATE:
                     T newItem = onCreate(context, item);
-                    newItem._flag = Flag.IDLE;
+                    newItem.setFlag(Flag.IDLE);
                     Logging.i(TAG, "Updating local flag to idle.[01]");
                     newItem.save();
                     break;
                 case Flag.NEED_WRITE:
                     try {
                         onWrite(context, item);
-                        item._flag = Flag.IDLE;
+                        item.setFlag(Flag.IDLE);
                         Logging.i(TAG, "Updating local flag to idle.[11]");
                         item.save();
                     } catch (RecordNotFound e) {
@@ -72,7 +72,7 @@ public abstract class MerlinService<T extends MerlinObject> {
     }
 
     private void localize(@NotNull T item, @NotNull T cacheItem) {
-        item._flag = cacheItem._flag;
+
     }
 
     public void performRead(Context context, String pk) throws Exception {

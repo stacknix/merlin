@@ -33,12 +33,12 @@ public class MerlinQuery<T extends MerlinObject> extends Filter {
         return Merlin.getInstance().db().search(this);
     }
 
-    public MerlinQuery<T> limit(int count){
+    public MerlinQuery<T> limit(int count) {
         this.limit = count;
         return this;
     }
 
-    public int getLimit(){
+    public int getLimit() {
         return limit;
     }
 
