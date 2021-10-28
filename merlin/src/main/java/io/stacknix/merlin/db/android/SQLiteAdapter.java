@@ -89,9 +89,9 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         T instance = null;
         String tableName = MerlinObject.getTableName(tClass);
         String primaryKey = MerlinObject.getPrimaryKey(tClass);
-        @NotNull Pair<String, Order> sort = MerlinObject.getSortKey(tClass);
         String selection = String.format("%s = ?", primaryKey);
-        String sortOrder = String.format("%s %s", sort.first, sort.second.name());
+        @NotNull Pair<String, Order> sorting = MerlinQuery.getDefaultSorting(tClass);
+        String sortOrder = String.format("%s %s", sorting.first, sorting.second.name());
         String[] selectionArgs = {pk};
         Cursor cursor = getDatabase().query(tableName, null, selection, selectionArgs, null, null, sortOrder);
         FieldInfo[] fieldInfo = factory.getFields(tClass);
@@ -104,16 +104,17 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     }
 
     @Override
-    protected <T extends MerlinObject> MerlinResult<T> onSearch(Class<T> tClass, MerlinQuery<T> query) {
+    protected <T extends MerlinObject> MerlinResult<T> onSearch(Class<T> tClass, @NotNull MerlinQuery<T> query) {
         String tableName = MerlinObject.getTableName(tClass);
-        @NotNull Pair<String, Order> sort = MerlinObject.getSortKey(tClass);
-        String sortOrder = String.format("%s %s", sort.first, sort.second.name());
+        String primaryKey = MerlinObject.getPrimaryKey(tClass);
+        @NotNull Pair<String, Order> sorting = query.getSorting();
+        String sortOrder = String.format("%s %s", sorting.first, sorting.second.name());
         SQLBuilder sb = new SQLBuilder(query);
         Cursor cursor;
         if (sb.getSQL() == null) {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
         } else {
-            String simple = String.format("SELECT * FROM %s WHERE %s ORDER BY %s", tableName, sb.getSQL(), sortOrder);
+            String simple = String.format("SELECT * FROM %s WHERE %s ORDER BY %s LIMIT %s", tableName, sb.getSQL(), sortOrder, query.getLimit());
             Logging.i(TAG, "sql:", simple);
             Logging.i(TAG, "args:", new Gson().toJson(sb.getSelectionArgs()));
             cursor = getDatabase().rawQuery(simple, sb.getSelectionArgs());

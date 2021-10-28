@@ -9,7 +9,6 @@ import io.stacknix.merlin.db.annotations.SortKey;
 @Model("product.product")
 public class Product extends MerlinObject {
     public String name;
-    @SortKey(Order.DESC)
     public long id;
     public float price;
 }

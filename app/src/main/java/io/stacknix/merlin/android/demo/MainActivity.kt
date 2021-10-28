@@ -12,6 +12,7 @@ import io.stacknix.merlin.android.demo.models.Product
 import io.stacknix.merlin.android.demo.samples.RecyclerAdapter
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
+import io.stacknix.merlin.db.annotations.Order
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +25,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.addData.setOnClickListener {
-            val all =  Merlin.where(Product::class.java).find()
+            val first = Merlin.where(Product::class.java)
+                .sort("id", Order.DESC).first()
             val product = Product()
             product.name = "Something"
-            product.id = if (all.isEmpty()) 1 else all.get(0).id+1
+            product.id = if (first == null) 1 else first.id + 1
             product.save()
 
         }
@@ -35,9 +37,10 @@ class MainActivity : AppCompatActivity() {
         val result = Merlin.where(Product::class.java)
             .equal("name", "Something")
             .notIn("id", arrayOf(200L, 700L))
+            .sort("id", Order.DESC)
             .find()
         binding.recyclerView.adapter = ProductAdapter(result)
-        
+
 
     }
 }

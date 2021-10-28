@@ -66,16 +66,6 @@ public abstract class MerlinObject {
         return values;
     }
 
-    public static <T extends MerlinObject> @NotNull Pair<String, Order> getSortKey(@NotNull Class<T> tClass) {
-        for (Field field : tClass.getFields()) {
-            SortKey sortKey = field.getAnnotation(SortKey.class);
-            if (sortKey != null) {
-                return new Pair<>(field.getName(), sortKey.value());
-            }
-        }
-        return new Pair<>(getPrimaryKey(tClass), Order.DESC);
-    }
-
     public String getPrimaryValue() {
         return (String) getFactory().getValue(this, getPrimaryKey(getClass()));
     }

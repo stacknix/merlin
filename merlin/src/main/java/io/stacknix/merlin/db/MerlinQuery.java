@@ -1,16 +1,28 @@
 package io.stacknix.merlin.db;
 
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import io.stacknix.merlin.db.annotations.Order;
+import io.stacknix.merlin.db.annotations.SortKey;
+import io.stacknix.merlin.db.commons.Pair;
 import io.stacknix.merlin.db.queries.Filter;
 
 public class MerlinQuery<T extends MerlinObject> extends Filter {
 
     private final Class<T> tClass;
+    private Pair<String, Order> sorting;
+    private int limit;
 
     public MerlinQuery(Class<T> tClass) {
         this.tClass = tClass;
+        this.sorting = getDefaultSorting(tClass);
+        this.limit = -1;
+    }
+
+    public static <T extends MerlinObject> @NotNull Pair<String, Order> getDefaultSorting(Class<T> tClass) {
+        return new Pair<>(MerlinObject.getPrimaryKey(tClass), Order.DESC);
     }
 
     public Class<T> getObjectClass() {
@@ -19,6 +31,40 @@ public class MerlinQuery<T extends MerlinObject> extends Filter {
 
     public MerlinResult<T> find() {
         return Merlin.getInstance().db().search(this);
+    }
+
+    public MerlinQuery<T> limit(int count){
+        this.limit = count;
+        return this;
+    }
+
+    public int getLimit(){
+        return limit;
+    }
+
+    public T first() {
+        MerlinResult<T> result = find();
+        if (!result.isEmpty()) {
+            return result.get(0);
+        }
+        return null;
+    }
+
+    public T last() {
+        MerlinResult<T> result = find();
+        if (!result.isEmpty()) {
+            return result.get(result.size() - 1);
+        }
+        return null;
+    }
+
+    public MerlinQuery<T> sort(String key, Order order) {
+        this.sorting = new Pair<>(key, order);
+        return this;
+    }
+
+    public @NotNull Pair<String, Order> getSorting() {
+        return sorting;
     }
 
     @Override
