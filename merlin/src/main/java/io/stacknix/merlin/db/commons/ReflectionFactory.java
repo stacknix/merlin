@@ -12,10 +12,13 @@ import java.util.Objects;
 
 import io.stacknix.merlin.db.MappingFactory;
 import io.stacknix.merlin.db.MerlinObject;
+import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Ignore;
 import io.stacknix.merlin.db.annotations.Internal;
 
 public class ReflectionFactory extends MappingFactory {
+
+    private static final String TAG = "ReflectionFactory";
 
     @Override
     public Map<String, Object> getValues(@NotNull MerlinObject subject) {
@@ -97,7 +100,7 @@ public class ReflectionFactory extends MappingFactory {
 
 
     @Override
-    public boolean onCompareObjects(MerlinObject first, MerlinObject second) {
+    public boolean onCompareObjects(@NotNull MerlinObject first, @NotNull MerlinObject second) {
         Map<String, Object> firstMap = getValues(first);
         Map<String, Object> secondMap = getValues(second);
         for (String key : firstMap.keySet()) {
@@ -110,7 +113,7 @@ public class ReflectionFactory extends MappingFactory {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     @Override

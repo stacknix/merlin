@@ -113,7 +113,7 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
         if (sb.getSQL() == null) {
             cursor = getDatabase().query(tableName, null, null, null, null, null, sortOrder);
         } else {
-            String simple = String.format("SELECT * FROM %s WHERE %s", tableName, sb.getSQL());
+            String simple = String.format("SELECT * FROM %s WHERE %s ORDER BY %s", tableName, sb.getSQL(), sortOrder);
             Logging.i(TAG, "sql:", simple);
             Logging.i(TAG, "args:", new Gson().toJson(sb.getSelectionArgs()));
             cursor = getDatabase().rawQuery(simple, sb.getSelectionArgs());
