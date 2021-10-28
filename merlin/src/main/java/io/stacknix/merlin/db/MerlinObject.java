@@ -15,37 +15,34 @@ import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
 import io.stacknix.merlin.db.annotations.SortKey;
 import io.stacknix.merlin.db.commons.FieldInfo;
+import io.stacknix.merlin.db.commons.MerlinException;
 import io.stacknix.merlin.db.commons.Pair;
 
 public abstract class MerlinObject {
-    @PrimaryKey
-    public String uuid;
 
     @Internal
     public int _flag;
 
-    // todo
     public static <T extends MerlinObject> @NotNull String getModelName(@NotNull Class<T> tClass) {
         Model modelName = tClass.getAnnotation(Model.class);
         assert modelName != null;
         return modelName.value();
     }
 
-    // todo
     public static <T extends MerlinObject> @NotNull String getPrimaryKey(@NotNull Class<T> tClass) {
         for (Field field : tClass.getFields()) {
             if (field.getAnnotation(PrimaryKey.class) != null) {
                 return field.getName();
             }
         }
-        assert false;
-        return null;
+        throw new MerlinException(String.format("Primary key not defined within %s", getModelName(tClass)));
     }
 
     public static <T extends MerlinObject> @NotNull String getTableName(@NotNull Class<T> tClass) {
         return getModelName(tClass).replaceAll("\\.", "_");
     }
 
+    @Deprecated
     public static <T extends MerlinObject> @NotNull List<String> getFields(Class<T> tClass) {
         List<String> fields = new ArrayList<>();
         for (FieldInfo info : getFactory().getFields(tClass)) {
@@ -56,6 +53,7 @@ public abstract class MerlinObject {
         return fields;
     }
 
+    @Deprecated
     public static <T extends MerlinObject> @NotNull Map<String, Object> getValues(Class<T> tClass, MerlinObject object) {
         Map<String, Object> values = new HashMap<>();
         for (FieldInfo info : getFactory().getFields(tClass)) {

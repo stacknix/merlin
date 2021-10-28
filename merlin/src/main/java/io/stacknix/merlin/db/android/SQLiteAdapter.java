@@ -26,6 +26,7 @@ import io.stacknix.merlin.db.MerlinQuery;
 import io.stacknix.merlin.db.MerlinResult;
 import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.commons.FieldInfo;
+import io.stacknix.merlin.db.commons.MerlinException;
 import io.stacknix.merlin.db.commons.Pair;
 import io.stacknix.merlin.db.queries.SQLBuilder;
 
@@ -46,11 +47,12 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     @Override
     protected <T extends MerlinObject> void onCreate(Class<T> tClass, @NotNull List<MerlinObject> objects) {
         String tableName = MerlinObject.getTableName(tClass);
-        String primaryKey = MerlinObject.getPrimaryKey(tClass);
         for (MerlinObject item : objects) {
+            if (item.getPrimaryValue() == null) {
+                throw new MerlinException("Primary key value not given.");
+            }
             ContentValues values = Utils.mapToContentValues(factory.getValues(item));
-            values.put(primaryKey, UUID.randomUUID().toString());
-            long insertIndex = getDatabase().insert(tableName, null, values);
+            long insertIndex = getDatabase().insertOrThrow(tableName, null, values);
             Logging.i(TAG, insertIndex);
         }
         listener.onChange(tClass, DBOperation.create);
@@ -106,7 +108,6 @@ public class SQLiteAdapter extends DBAdapter<SQLiteDatabase> {
     @Override
     protected <T extends MerlinObject> MerlinResult<T> onSearch(Class<T> tClass, @NotNull MerlinQuery<T> query) {
         String tableName = MerlinObject.getTableName(tClass);
-        String primaryKey = MerlinObject.getPrimaryKey(tClass);
         @NotNull Pair<String, Order> sorting = query.getSorting();
         String sortOrder = String.format("%s %s", sorting.first, sorting.second.name());
         SQLBuilder sb = new SQLBuilder(query);
