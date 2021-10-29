@@ -71,11 +71,21 @@ public class ReflectionFactory extends MappingFactory {
                     if (field.getType().isAssignableFrom(int.class)) {
                         field.setInt(object, (Integer) val);
                     } else if (field.getType().isAssignableFrom(long.class)) {
-                        field.setLong(object, (Long) val);
+                        // allow int to long conversion/assignment
+                        if (val instanceof Integer) {
+                            field.setLong(object, ((Number) val).longValue());
+                        } else {
+                            field.setLong(object, (Long) val);
+                        }
                     } else if (field.getType().isAssignableFrom(float.class)) {
                         field.setFloat(object, (Float) val);
                     } else if (field.getType().isAssignableFrom(double.class)) {
-                        field.setDouble(object, (Double) val);
+                        // allow float to double conversion/assignment
+                        if (val instanceof Float) {
+                            field.setDouble(object, ((Number) val).doubleValue());
+                        } else {
+                            field.setDouble(object, (Double) val);
+                        }
                     } else if (field.getType().isAssignableFrom(boolean.class)) {
                         field.setBoolean(object, (Boolean) val);
                     } else if (field.getType().isAssignableFrom(String.class)) {

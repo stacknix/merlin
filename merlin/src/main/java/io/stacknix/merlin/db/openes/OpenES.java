@@ -35,22 +35,21 @@ public class OpenES implements OpenESListener {
             String model = (String) resource.get("model");
             String event = (String) resource.get("event");
             String uuid = (String) resource.get("uuid");
-            long id = Long.parseLong(Objects.requireNonNull(resource.get("id")).toString());
             Class<? extends MerlinObject> tClass = Merlin.getInstance().findModel(model);
             if (tClass != null) {
                 switch (OpenESEvent.valueOf(event)) {
                     case create:
                         MerlinObject createInstance = mappingFactory.onCreateInstance(tClass);
                         mappingFactory.setValues((HashMap<String, Object>) resource.get("data"), createInstance);
-                        onCreate(tClass, model, id, uuid, createInstance);
+                        onCreate(tClass, model, uuid, createInstance);
                         break;
                     case write:
                         MerlinObject writeInstance = mappingFactory.onCreateInstance(tClass);
                         mappingFactory.setValues((HashMap<String, Object>) resource.get("data"), writeInstance);
-                        onWrite(tClass, model, id, uuid, writeInstance);
+                        onWrite(tClass, model, uuid, writeInstance);
                         break;
                     case unlink:
-                        onUnlink(tClass, model, id, uuid);
+                        onUnlink(tClass, model, uuid);
                         break;
                 }
             }
@@ -58,7 +57,7 @@ public class OpenES implements OpenESListener {
     }
 
     @Override
-    public void onUnlink(Class<? extends MerlinObject> tClass, String model, long id, String uuid) {
+    public void onUnlink(Class<? extends MerlinObject> tClass, String model, String uuid) {
         MerlinObject localObject = Merlin.where(tClass).equal("uuid", uuid).first();
         if (localObject != null) {
             Merlin.getInstance().db().delete(tClass, Collections.singletonList(localObject));
@@ -66,7 +65,7 @@ public class OpenES implements OpenESListener {
     }
 
     @Override
-    public void onCreate(Class<? extends MerlinObject> tClass, String model, long id, String uuid, @NotNull MerlinObject data) {
+    public void onCreate(Class<? extends MerlinObject> tClass, String model, String uuid, @NotNull MerlinObject data) {
         MerlinObject item = Merlin.where(tClass).equal("uuid", uuid).first();
         data.uuid = uuid;
         if (item != null) {
@@ -77,7 +76,7 @@ public class OpenES implements OpenESListener {
     }
 
     @Override
-    public void onWrite(Class<? extends MerlinObject> tClass, String model, long id, String uuid, @NotNull MerlinObject data) {
+    public void onWrite(Class<? extends MerlinObject> tClass, String model, String uuid, @NotNull MerlinObject data) {
         MerlinObject item = Merlin.where(tClass).equal("uuid", uuid).first();
         data.uuid = uuid;
         if (item != null) {
