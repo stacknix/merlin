@@ -12,13 +12,10 @@ import java.util.Objects;
 
 import io.stacknix.merlin.db.MappingFactory;
 import io.stacknix.merlin.db.MerlinObject;
-import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Ignore;
 import io.stacknix.merlin.db.annotations.Internal;
 
 public class ReflectionFactory extends MappingFactory {
-
-    private static final String TAG = "ReflectionFactory";
 
     @Override
     public Map<String, Object> getValues(@NotNull MerlinObject subject) {
@@ -95,6 +92,21 @@ public class ReflectionFactory extends MappingFactory {
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void setValue(@NotNull MerlinObject object, String fieldName, Object value) {
+        try {
+            for (Field field : getReflectionFields(object.getClass())) {
+                if (field.getName().equals(fieldName)) {
+                    field.setAccessible(true);
+                    field.set(object, value);
+                    break;
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 

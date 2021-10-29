@@ -20,8 +20,6 @@ public abstract class MerlinObject {
 
     public static final String TAG = "MerlinObject";
 
-    @PrimaryKey
-    public String uuid;
     @Internal
     private int _flag;
 
@@ -69,6 +67,10 @@ public abstract class MerlinObject {
         return (String) getFactory().getValue(this, getPrimaryKey(getClass()));
     }
 
+    public void setPrimaryValue(String value) {
+        getFactory().setValue(this, getPrimaryKey(getClass()), value);
+    }
+
     public boolean areItemsTheSame(@NotNull MerlinObject subject) {
         return getPrimaryValue().equals(subject.getPrimaryValue());
     }
@@ -109,3 +111,8 @@ public abstract class MerlinObject {
 
 
 }
+
+
+
+
+

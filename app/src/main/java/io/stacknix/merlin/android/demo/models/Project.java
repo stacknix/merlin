@@ -9,6 +9,8 @@ import io.stacknix.merlin.db.annotations.SortKey;
 
 @Model("organisation.project")
 public class Project extends MerlinObject {
+    @PrimaryKey
+    public String uuid;
     public long id;
     public String name;
 }

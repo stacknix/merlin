@@ -66,8 +66,8 @@ public class OpenES implements OpenESListener {
 
     @Override
     public void onCreate(Class<? extends MerlinObject> tClass, String model, String uuid, @NotNull MerlinObject data) {
-        MerlinObject item = Merlin.where(tClass).equal("uuid", uuid).first();
-        data.uuid = uuid;
+        MerlinObject item = Merlin.where(tClass).equal(MerlinObject.getPrimaryKey(tClass), uuid).first();
+        data.setPrimaryValue(uuid);
         if (item != null) {
             Merlin.getInstance().db().write(tClass, Collections.singletonList(data));
         } else {
@@ -77,8 +77,8 @@ public class OpenES implements OpenESListener {
 
     @Override
     public void onWrite(Class<? extends MerlinObject> tClass, String model, String uuid, @NotNull MerlinObject data) {
-        MerlinObject item = Merlin.where(tClass).equal("uuid", uuid).first();
-        data.uuid = uuid;
+        MerlinObject item = Merlin.where(tClass).equal(MerlinObject.getPrimaryKey(tClass), uuid).first();
+        data.setPrimaryValue(uuid);
         if (item != null) {
             // update remote data local ID with local data local ID
             Merlin.getInstance().db().write(tClass, Collections.singletonList(data));
