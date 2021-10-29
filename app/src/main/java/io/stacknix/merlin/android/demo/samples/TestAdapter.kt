@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.stacknix.merlin.android.demo.databinding.ItemProductViewBinding
-import io.stacknix.merlin.android.demo.models.Product
+import io.stacknix.merlin.android.demo.models.Project
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.android.DiffUtilWrapper
@@ -16,7 +16,8 @@ import io.stacknix.merlin.db.android.DiffUtilWrapper
 class TestAdapter(val context: Context) :
     RecyclerView.Adapter<TestAdapter.ViewHolder>() {
 
-    var result: MerlinResult<Product> = Merlin.where(Product::class.java).find()
+    var result: MerlinResult<Project> = Merlin.where(
+        Project::class.java).find()
 
     init {
         result.listen {

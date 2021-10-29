@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1041998783682",
+    "project_id": "stacknix-9fcb0",
+    "storage_bucket": "stacknix-9fcb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041998783682:android:ff0e98800f8f1b7074475b",
+        "android_client_info": {
+          "package_name": "io.stacknix.merlin.android.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041998783682-bt1bvbnilijbvureg0j73d75kb8kb962.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDegpOjLBIKpZkfjSQPk6TZj1BWbLckxTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041998783682-bt1bvbnilijbvureg0j73d75kb8kb962.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

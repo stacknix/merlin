@@ -62,6 +62,15 @@ public class Merlin {
         return this.models;
     }
 
+    public Class<? extends MerlinObject> findModel(String modelName) {
+        for (Class<? extends MerlinObject> tClass : getModels()) {
+            if (MerlinObject.getModelName(tClass).equals(modelName)) {
+                return tClass;
+            }
+        }
+        return null;
+    }
+
     public DBAdapter<?> db() {
         return this.db;
     }

@@ -7,11 +7,8 @@ import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
 import io.stacknix.merlin.db.annotations.SortKey;
 
-@Model("product.product")
-public class Product extends MerlinObject {
-    @PrimaryKey
-    public String uuid;
-    public String name;
+@Model("organisation.project")
+public class Project extends MerlinObject {
     public long id;
-   // public float price;
+    public String name;
 }

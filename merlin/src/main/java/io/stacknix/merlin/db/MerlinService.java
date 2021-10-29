@@ -2,8 +2,6 @@ package io.stacknix.merlin.db;
 
 import android.content.Context;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +11,7 @@ import io.stacknix.merlin.db.commons.RecordNotFound;
 import io.stacknix.merlin.db.commons.ResultCompare;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public abstract class MerlinService<T extends MerlinObject> {
+public abstract class MerlinService<T extends MerlinObject, I>{
 
     private final Class<T> tClass;
 
@@ -27,7 +25,7 @@ public abstract class MerlinService<T extends MerlinObject> {
 
     public abstract boolean onUnlink(Context context, T object) throws Exception;
 
-    public abstract T onRead(Context context, String pk) throws Exception;
+    public abstract T onRead(Context context, I id) throws Exception;
 
     public abstract List<T> onSearch(Context context, MerlinQuery<T> query) throws Exception;
 
@@ -35,6 +33,36 @@ public abstract class MerlinService<T extends MerlinObject> {
         return tClass;
     }
 
+    public void read(Context context, I key) throws Exception {
+        T remoteItem = onRead(context, key);
+        DBAdapter<?> db = Merlin.getInstance().db();
+        T localItem = db.read(tClass, remoteItem.getPrimaryValue());
+        if (localItem != null) {
+            db.write(tClass, Collections.singletonList(remoteItem));
+        } else {
+            db.create(tClass, Collections.singletonList(remoteItem));
+        }
+    }
+
+    public void search(Context context) throws Exception {
+        search(context, new MerlinQuery<>(getObjectClass()));
+    }
+
+    public void search(Context context, MerlinQuery<T> query) throws Exception {
+        DBAdapter<?> db = Merlin.getInstance().db();
+        List<T> localList = db.search(query);
+        List<T> remoteList = onSearch(context, query);
+        ResultCompare<T> result = new ResultCompare<>(localList, remoteList);
+        db.delete(tClass, result.getDeleteData());
+        db.write(tClass, result.getWriteData());
+        db.create(tClass, result.getCreateData());
+    }
+
+    /**
+     * this method sync existing record CREATE | WRITE | UNLINK
+     * @param context
+     * @throws Exception
+     */
     public synchronized void synchronize(Context context) throws Exception {
         final String TAG = "MerlinService";
         for (T item : Merlin.where(tClass).find()) {
@@ -69,31 +97,6 @@ public abstract class MerlinService<T extends MerlinObject> {
                     break;
             }
         }
-    }
-
-    private void localize(@NotNull T item, @NotNull T cacheItem) {
-
-    }
-
-    public void performRead(Context context, String pk) throws Exception {
-        T remoteItem = onRead(context, pk);
-        DBAdapter<?> db = Merlin.getInstance().db();
-        T localItem = db.read(tClass, remoteItem.getPrimaryValue());
-        if (localItem != null) {
-            db.write(tClass, Collections.singletonList(remoteItem));
-        } else {
-            db.create(tClass, Collections.singletonList(remoteItem));
-        }
-    }
-
-    public void performSearch(Context context, MerlinQuery<T> query) throws Exception {
-        DBAdapter<?> db = Merlin.getInstance().db();
-        List<T> localList = db.search(query);
-        List<T> remoteList = onSearch(context, query);
-        ResultCompare<T> result = new ResultCompare<>(localList, remoteList);
-        db.delete(tClass, result.getDeleteData());
-        db.write(tClass, result.getWriteData());
-        db.create(tClass, result.getCreateData());
     }
 
 }

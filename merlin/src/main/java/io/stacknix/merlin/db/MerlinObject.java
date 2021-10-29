@@ -20,6 +20,8 @@ public abstract class MerlinObject {
 
     public static final String TAG = "MerlinObject";
 
+    @PrimaryKey
+    public String uuid;
     @Internal
     private int _flag;
 
@@ -42,7 +44,6 @@ public abstract class MerlinObject {
         return getModelName(tClass).replaceAll("\\.", "_");
     }
 
-    @Deprecated
     public static <T extends MerlinObject> @NotNull List<String> getFields(Class<T> tClass) {
         List<String> fields = new ArrayList<>();
         for (FieldInfo info : getFactory().getFields(tClass)) {
