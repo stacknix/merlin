@@ -84,6 +84,7 @@ public abstract class MerlinService<T extends MerlinObject, I>{
                         Logging.i(TAG, "Deleting from local.[11]");
                         item.delete();
                     }
+                    break;
                 case Flag.NEED_UNLINK:
                     try {
                         onUnlink(context, item);

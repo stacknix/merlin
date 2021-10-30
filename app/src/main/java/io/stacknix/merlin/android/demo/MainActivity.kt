@@ -1,5 +1,7 @@
 package io.stacknix.merlin.android.demo
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import com.fabric.io.jsonrpc2.JsonRPCClient
 import io.stacknix.merlin.android.demo.databinding.ActivityMainBinding
 import io.stacknix.merlin.android.demo.databinding.ItemProductViewBinding
 import io.stacknix.merlin.android.demo.models.Project
+import io.stacknix.merlin.android.demo.samples.AuthUtil
 import io.stacknix.merlin.android.demo.samples.RecyclerAdapter
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val service = JsonRPCService(Project::class.java, getClient())
+        val service = JsonRPCService(Project::class.java, AuthUtil.getClient())
 
         binding.addData.setOnClickListener {
             val first = Merlin.where(Project::class.java)
@@ -43,8 +46,8 @@ class MainActivity : AppCompatActivity() {
             product.save()
 
             GlobalScope.launch {
-                withContext(IO){
-                    service.synchronize(applicationContext)
+                withContext(IO) {
+                   UploadWorker.sync(applicationContext)
                 }
             }
         }
@@ -53,36 +56,46 @@ class MainActivity : AppCompatActivity() {
             .notIn("id", arrayOf(200L, 700L))
             .sort("id", Order.DESC)
             .find()
-        binding.recyclerView.adapter = ProductAdapter(result)
+        binding.recyclerView.adapter = ProductAdapter(this, result, service)
 
 
         GlobalScope.launch {
-            withContext(IO){
+            withContext(IO) {
                 service.search(applicationContext)
             }
         }
 
-        FirebaseService.registerFirebaseDevice(getClient())
+        FirebaseService.registerFirebaseDevice(AuthUtil.getClient())
     }
 
-    private fun getClient(): JsonRPCClient{
-        val url = "http://192.168.43.60:9000/api/v1/jsonrpc"
-        val headers: MutableMap<String, String> = HashMap()
-        headers["Authorization"] = "Bearer f04b2d14-2d36-44e7-8a2f-b7fa7e4fbe26"
-        return JsonRPCClient(url, headers)
-    }
+
 }
 
-internal class ProductAdapter(result: MerlinResult<Project>) :
+internal class ProductAdapter(private val context: Context,
+                              result: MerlinResult<Project>,
+                              private val service: JsonRPCService<Project>) :
     RecyclerAdapter<ItemProductViewBinding, Project>(result) {
 
     override fun getBinding(inflater: LayoutInflater, parent: ViewGroup): ItemProductViewBinding {
         return ItemProductViewBinding.inflate(inflater, parent, false)
     }
 
-    override fun onBind(binding: ItemProductViewBinding, item: Project) {
-        with(binding) {
-            itemTitle.text = item.name + ":" + item.id
+    @SuppressLint("SetTextI18n")
+    override fun onBind(holder: ViewHolder<ItemProductViewBinding>, item: Project) {
+        with(holder.binding) {
+            itemTitle.text = item.name + ": " + item.id
+            holder.itemView.setOnClickListener {
+                item.flag = Flag.NEED_UNLINK
+                item.save()
+                UploadWorker.sync(context)
+            }
+            holder.itemView.setOnLongClickListener {
+                item.name = item.name+":"
+                item.flag = Flag.NEED_WRITE
+                item.save()
+                UploadWorker.sync(context)
+                true
+            }
         }
     }
 }

@@ -10,6 +10,9 @@ public abstract class MappingFactory {
      */
     public abstract Map<String, Object> getData(MerlinObject object);
 
+    /**
+     * It returns all the values included internal.
+     */
     public abstract Map<String, Object> getValues(MerlinObject object);
 
     public abstract Object getValue(MerlinObject object, String fieldName);
