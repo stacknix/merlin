@@ -12,6 +12,7 @@ import io.stacknix.merlin.android.demo.samples.RecyclerAdapter
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.annotations.Order
+import io.stacknix.merlin.db.commons.Flag
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val service = JsonRPCService(Project::class.java, getClient())
+
         binding.addData.setOnClickListener {
             val first = Merlin.where(Project::class.java)
                 .sort("id", Order.DESC).first()
@@ -36,8 +39,14 @@ class MainActivity : AppCompatActivity() {
             product.uuid = UUID.randomUUID().toString()
             product.name = "Something"
             product.id = if (first == null) 1 else first.id + 1
+            product.flag = Flag.NEED_CREATE
             product.save()
 
+            GlobalScope.launch {
+                withContext(IO){
+                    service.synchronize(applicationContext)
+                }
+            }
         }
 
         val result = Merlin.where(Project::class.java)
@@ -49,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             withContext(IO){
-                val service = JsonRPCService(Project::class.java, getClient())
                 service.search(applicationContext)
             }
         }

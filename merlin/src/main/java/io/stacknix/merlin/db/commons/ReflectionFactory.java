@@ -6,22 +6,37 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import io.stacknix.merlin.db.MappingFactory;
 import io.stacknix.merlin.db.MerlinObject;
+import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Ignore;
 import io.stacknix.merlin.db.annotations.Internal;
 
 public class ReflectionFactory extends MappingFactory {
 
     @Override
+    public Map<String, Object> getData(MerlinObject subject) {
+        Map<String, Object> values = getValues(subject);
+        @NotNull List<Field> fields = getReflectionFields(subject.getClass(), true);
+        Set<String> set = new HashSet<>();
+        for (Field field : fields) {
+            set.add(field.getName());
+        }
+        values.keySet().retainAll(set);
+        return values;
+    }
+
+    @Override
     public Map<String, Object> getValues(@NotNull MerlinObject subject) {
         Map<String, Object> values = new HashMap<>();
         try {
-            for (Field field : getReflectionFields(subject.getClass())) {
+            for (Field field : getReflectionFields(subject.getClass(), false)) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
                 if (field.getType().isAssignableFrom(int.class)) {
@@ -60,7 +75,7 @@ public class ReflectionFactory extends MappingFactory {
     @Override
     public void setValues(Map<String, Object> values, @NotNull MerlinObject object) {
         try {
-            for (Field field : getReflectionFields(object.getClass())) {
+            for (Field field : getReflectionFields(object.getClass(), false)) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
                 Object val = values.get(fieldName);
@@ -98,7 +113,7 @@ public class ReflectionFactory extends MappingFactory {
     @Override
     public void setValue(@NotNull MerlinObject object, String fieldName, Object value) {
         try {
-            for (Field field : getReflectionFields(object.getClass())) {
+            for (Field field : getReflectionFields(object.getClass(), false)) {
                 if (field.getName().equals(fieldName)) {
                     field.setAccessible(true);
                     field.set(object, value);
@@ -140,7 +155,7 @@ public class ReflectionFactory extends MappingFactory {
 
     @Override
     public <T extends MerlinObject> FieldInfo[] getFields(Class<T> tClass) {
-        List<Field> fields = getReflectionFields(tClass);
+        List<Field> fields = getReflectionFields(tClass, false);
         FieldInfo[] fieldsInfo = new FieldInfo[fields.size()];
         for (int i = 0; i < fieldsInfo.length; i++) {
             Field field = fields.get(i);
@@ -150,12 +165,15 @@ public class ReflectionFactory extends MappingFactory {
     }
 
 
-    private @NotNull List<Field> getReflectionFields(@NotNull Class<?> tClass) {
+    private @NotNull List<Field> getReflectionFields(@NotNull Class<?> tClass, boolean excludeInternal) {
         List<Field> data = new ArrayList<>();
         Field[] allFields = Utils.mergeArray(tClass.getDeclaredFields(), Objects.requireNonNull(tClass.getSuperclass()).getDeclaredFields());
         for (Field field : allFields) {
             if (!Modifier.isStatic(field.getModifiers())) {
-                if (field.getAnnotation(Ignore.class) == null) {
+                if (!field.isAnnotationPresent(Ignore.class)) {
+                    if (excludeInternal && field.isAnnotationPresent(Internal.class)) {
+                        continue;
+                    }
                     data.add(field);
                 }
             }
