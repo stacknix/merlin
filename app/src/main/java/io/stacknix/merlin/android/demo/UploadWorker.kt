@@ -20,7 +20,7 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
 
     companion object {
 
-        const val HttpWorker = "HttpWorker"
+        private const val HttpWorker = "HttpWorker"
 
         fun sync(context: Context) {
             val workManager = WorkManager.getInstance(context)

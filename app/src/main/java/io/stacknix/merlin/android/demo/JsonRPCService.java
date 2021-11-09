@@ -3,12 +3,16 @@ package io.stacknix.merlin.android.demo;
 import android.content.Context;
 
 import com.fabric.io.jsonrpc2.JsonRPCClient;
+import com.fabric.io.jsonrpc2.JsonRPCResponse;
 import com.fabric.io.jsonrpc2.models.ModelRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +62,10 @@ public class JsonRPCService<T extends MerlinObject> extends MerlinService<T, Lon
     public List<T> onSearch(Context context, MerlinQuery<T> query) throws Exception {
         final List<String> fields = MerlinObject.getFields(getObjectClass());
         final Type type = TypeToken.getParameterized(List.class, getObjectClass()).getType();
-        return request.search(0, fields).to(type);
+        JsonRPCResponse response = request.search(0, fields).getResponse();
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        String data = gson.toJson(response.result);
+        return gson.fromJson(data, type);
     }
 
     private long getObjectId(@NotNull Map<String, Object> values) throws NullPointerException{
