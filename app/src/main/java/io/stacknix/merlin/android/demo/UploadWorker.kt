@@ -3,7 +3,7 @@ package io.stacknix.merlin.android.demo
 import android.content.Context
 import androidx.work.*
 import io.stacknix.merlin.android.demo.models.Project
-import io.stacknix.merlin.android.demo.samples.AuthUtil.Companion.getClient
+import io.stacknix.merlin.android.demo.samples.AuthUtilSample.Companion.getClient
 
 class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {

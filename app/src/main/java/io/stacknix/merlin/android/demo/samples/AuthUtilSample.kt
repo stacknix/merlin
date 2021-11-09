@@ -3,7 +3,7 @@ package io.stacknix.merlin.android.demo.samples
 import com.fabric.io.jsonrpc2.JsonRPCClient
 import java.util.HashMap
 
-class AuthUtil {
+class AuthUtilSample {
 
     companion object {
         fun getClient(): JsonRPCClient {

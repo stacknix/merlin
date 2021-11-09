@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.fabric.io.jsonrpc2.JsonRPCClient
 import io.stacknix.merlin.android.demo.databinding.ActivityMainBinding
 import io.stacknix.merlin.android.demo.databinding.ItemProductViewBinding
 import io.stacknix.merlin.android.demo.models.Project
-import io.stacknix.merlin.android.demo.samples.AuthUtil
-import io.stacknix.merlin.android.demo.samples.RecyclerAdapter
+import io.stacknix.merlin.android.demo.samples.AuthUtilSample
+import io.stacknix.merlin.android.demo.samples.RecyclerAdapterSample
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.annotations.Order
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val service = JsonRPCService(Project::class.java, AuthUtil.getClient())
+        val service = JsonRPCService(Project::class.java, AuthUtilSample.getClient())
 
         binding.addData.setOnClickListener {
             val first = Merlin.where(Project::class.java)
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        FirebaseService.registerFirebaseDevice(AuthUtil.getClient())
+        FirebaseService.registerFirebaseDevice(AuthUtilSample.getClient())
     }
 
 
@@ -74,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 internal class ProductAdapter(private val context: Context,
                               result: MerlinResult<Project>,
                               private val service: JsonRPCService<Project>) :
-    RecyclerAdapter<ItemProductViewBinding, Project>(result) {
+    RecyclerAdapterSample<ItemProductViewBinding, Project>(result) {
 
     override fun getBinding(inflater: LayoutInflater, parent: ViewGroup): ItemProductViewBinding {
         return ItemProductViewBinding.inflate(inflater, parent, false)

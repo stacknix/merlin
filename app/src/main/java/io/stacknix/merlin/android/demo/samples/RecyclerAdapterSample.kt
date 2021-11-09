@@ -11,8 +11,8 @@ import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.android.DiffUtilWrapper
 
 
-abstract class RecyclerAdapter<B : ViewBinding, T : MerlinObject>(private var result: MerlinResult<T>) :
-    RecyclerView.Adapter<RecyclerAdapter.ViewHolder<B>>() {
+abstract class RecyclerAdapterSample<B : ViewBinding, T : MerlinObject>(private var result: MerlinResult<T>) :
+    RecyclerView.Adapter<RecyclerAdapterSample.ViewHolder<B>>() {
 
     init {
         result.listen {
