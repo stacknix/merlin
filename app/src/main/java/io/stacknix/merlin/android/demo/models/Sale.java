@@ -6,9 +6,6 @@ import io.stacknix.merlin.db.annotations.PrimaryKey;
 
 @Model("sale.sale")
 public class Sale extends MerlinObject {
-    @PrimaryKey
-    public String uuid;
-    public long id;
     public String name;
     public float list_price;
 }

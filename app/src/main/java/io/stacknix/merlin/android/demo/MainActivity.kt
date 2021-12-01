@@ -58,6 +58,15 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = ProductAdapter(this, result, service)
 
 
+
+        binding.refreshData.setOnClickListener {
+            GlobalScope.launch {
+                withContext(IO) {
+                    service.search(applicationContext)
+                }
+            }
+        }
+
         GlobalScope.launch {
             withContext(IO) {
                 service.search(applicationContext)
