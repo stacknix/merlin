@@ -63,7 +63,7 @@ dependencies {
 
 
     implementation project(path: ':merlin')
-    kapt 'com.github.stacknix:merlin-compiler:0.0.2'
+    kapt 'com.github.stacknix:merlin-compiler:0.0.3'
 
     implementation 'com.github.SpiralDeveloper:jsonrpc-java:0.0.2'
 
