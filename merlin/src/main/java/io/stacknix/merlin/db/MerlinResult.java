@@ -36,4 +36,8 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
     public void deleteAll() {
         Merlin.getInstance().db().delete(query.getObjectClass(), (List<MerlinObject>) this);
     }
+
+    public MerlinQuery<T> getQuery(){
+        return query;
+    }
 }
