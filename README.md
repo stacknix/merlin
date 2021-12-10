@@ -1,4 +1,4 @@
-# merlin
+# Merlin
 Merlin is a Android database which is primarily designed for live networking objects.
 It provides the live object which is directly mirror the actual state of object.
 As mentioned It designed for work with networking that doesn't mean can't be used for general purpose database storage.
@@ -65,7 +65,7 @@ You need to perform build once you add your very first model,
 this will generate MerlinDatabase class which we need for
 initialization.
 
-###Initialize
+## Initialize
 
 Finally, you need to initialize database. You can simply do that once
 for all in you Application class.
