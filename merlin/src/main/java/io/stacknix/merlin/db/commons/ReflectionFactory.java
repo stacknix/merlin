@@ -6,16 +6,28 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import io.stacknix.merlin.db.MappingFactory;
 import io.stacknix.merlin.db.MerlinObject;
+import io.stacknix.merlin.db.android.Logging;
 import io.stacknix.merlin.db.annotations.Ignore;
 import io.stacknix.merlin.db.annotations.Internal;
 
 public class ReflectionFactory extends MappingFactory {
+
+    @Override
+    public Map<String, Object> getData(MerlinObject subject) {
+        Map<String, Object> values = getValues(subject);
+        @NotNull List<String> fields = MerlinObject.getFields(subject.getClass());
+        Set<String> set = new HashSet<>(fields);
+        values.keySet().retainAll(set);
+        return values;
+    }
 
     @Override
     public Map<String, Object> getValues(@NotNull MerlinObject subject) {
@@ -155,7 +167,7 @@ public class ReflectionFactory extends MappingFactory {
         Field[] allFields = Utils.mergeArray(tClass.getDeclaredFields(), Objects.requireNonNull(tClass.getSuperclass()).getDeclaredFields());
         for (Field field : allFields) {
             if (!Modifier.isStatic(field.getModifiers())) {
-                if (field.getAnnotation(Ignore.class) == null) {
+                if (!field.isAnnotationPresent(Ignore.class)) {
                     data.add(field);
                 }
             }

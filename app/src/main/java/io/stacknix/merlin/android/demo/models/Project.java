@@ -7,10 +7,8 @@ import io.stacknix.merlin.db.annotations.Order;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
 import io.stacknix.merlin.db.annotations.SortKey;
 
-@Model("organisation.project")
+@Model("vm.machine")
 public class Project extends MerlinObject {
-    @PrimaryKey
-    public String uuid;
-    public long id;
     public String name;
+    public String ipv4;
 }

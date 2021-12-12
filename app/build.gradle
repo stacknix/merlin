@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
@@ -63,7 +63,7 @@ dependencies {
 
 
     implementation project(path: ':merlin')
-    kapt 'com.github.stacknix:merlin-compiler:0.0.2'
+    kapt 'com.github.stacknix:merlin-compiler:0.0.3'
 
     implementation 'com.github.SpiralDeveloper:jsonrpc-java:0.0.2'
 
@@ -76,5 +76,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx'
     //implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:2.6.0"
 
 }

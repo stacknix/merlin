@@ -26,6 +26,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -44,5 +48,5 @@ dependencies {
     implementation 'org.jetbrains:annotations:16.0.2'
     implementation 'com.google.guava:guava:31.0.1-jre'
     implementation 'com.google.code.gson:gson:2.8.8'
-    api 'com.github.stacknix:merlin-annotations:0.0.2'
+    api 'com.github.stacknix:merlin-annotations:0.0.3'
 }

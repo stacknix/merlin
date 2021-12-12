@@ -11,8 +11,8 @@ import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.android.DiffUtilWrapper
 
 
-abstract class RecyclerAdapter<B : ViewBinding, T : MerlinObject>(private var result: MerlinResult<T>) :
-    RecyclerView.Adapter<RecyclerAdapter.ViewHolder<B>>() {
+abstract class RecyclerAdapterSample<B : ViewBinding, T : MerlinObject>(private var result: MerlinResult<T>) :
+    RecyclerView.Adapter<RecyclerAdapterSample.ViewHolder<B>>() {
 
     init {
         result.listen {
@@ -26,7 +26,7 @@ abstract class RecyclerAdapter<B : ViewBinding, T : MerlinObject>(private var re
 
     abstract fun getBinding(inflater: LayoutInflater, parent: ViewGroup): B
 
-    abstract fun onBind(binding: B, item: T)
+    abstract fun onBind(holder: ViewHolder<B>, item: T)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<B> {
         return ViewHolder(getBinding(LayoutInflater.from(parent.context), parent))
@@ -38,11 +38,10 @@ abstract class RecyclerAdapter<B : ViewBinding, T : MerlinObject>(private var re
 
     override fun onBindViewHolder(holder: ViewHolder<B>, position: Int) {
         with(holder) {
-            onBind(this.binding, result[position])
+            onBind(this, result[position])
         }
     }
 
     class ViewHolder<B : ViewBinding>(val binding: B) :
         RecyclerView.ViewHolder(binding.root)
-
 }

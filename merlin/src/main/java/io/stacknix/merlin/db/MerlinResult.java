@@ -25,6 +25,11 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         });
     }
 
+    public void observe(ResultChangeListener<T> listener) {
+        dispatchResult(query.find());
+        listen(listener);
+    }
+
     private void dispatchResult(MerlinResult<T> result) {
         if (listener != null) {
             Logging.i(TAG, "Dispatching Results");
@@ -35,5 +40,9 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
     @SuppressWarnings("unchecked")
     public void deleteAll() {
         Merlin.getInstance().db().delete(query.getObjectClass(), (List<MerlinObject>) this);
+    }
+
+    public MerlinQuery<T> getQuery(){
+        return query;
     }
 }

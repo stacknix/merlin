@@ -16,7 +16,7 @@
         android:name=".DemoApplication"
         android:theme="@style/Theme.MerlinAndroid"
         tools:targetApi="m">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

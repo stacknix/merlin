@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.stacknix.merlin.db.android.Logging;
+import io.stacknix.merlin.db.annotations.ID;
 import io.stacknix.merlin.db.annotations.Internal;
 import io.stacknix.merlin.db.annotations.Model;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
@@ -20,6 +21,10 @@ public abstract class MerlinObject {
 
     public static final String TAG = "MerlinObject";
 
+    @PrimaryKey
+    public String uuid;
+    @ID
+    public long id;
     @Internal
     private int _flag;
 
@@ -36,6 +41,15 @@ public abstract class MerlinObject {
             }
         }
         throw new MerlinException(String.format("Primary key not defined within %s", getModelName(tClass)));
+    }
+
+    public static <T extends MerlinObject> @NotNull String getIdKey(@NotNull Class<T> tClass) {
+        for (Field field : tClass.getFields()) {
+            if (field.getAnnotation(ID.class) != null) {
+                return field.getName();
+            }
+        }
+        throw new MerlinException(String.format("ID key not defined within %s", getModelName(tClass)));
     }
 
     public static <T extends MerlinObject> @NotNull String getTableName(@NotNull Class<T> tClass) {
@@ -69,6 +83,10 @@ public abstract class MerlinObject {
 
     public void setPrimaryValue(String value) {
         getFactory().setValue(this, getPrimaryKey(getClass()), value);
+    }
+
+    public long getIdValue() {
+        return (long) getFactory().getValue(this, getIdKey(getClass()));
     }
 
     public boolean areItemsTheSame(@NotNull MerlinObject subject) {
