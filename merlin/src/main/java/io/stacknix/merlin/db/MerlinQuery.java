@@ -1,6 +1,9 @@
 package io.stacknix.merlin.db;
 
 
+import android.os.Handler;
+import android.os.Looper;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,17 +40,7 @@ public class MerlinQuery<T extends MerlinObject> extends Filter {
     public void observe(@NotNull ResultChangeListener<T> resultChangeListener) {
         MerlinResult<T> result = find();
         resultChangeListener.onChange(result);
-        result.listen(resultChangeListener);
-    }
-
-    public void observeObject(@NotNull ObjectChangeListener<T> objectChangeListener) {
-        MerlinResult<T> result = find();
-        if (result.isEmpty()) {
-            objectChangeListener.onChange(null);
-        } else {
-            objectChangeListener.onChange(result.get(0));
-        }
-        result.listenObject(objectChangeListener);
+        new Handler(Looper.getMainLooper()).post(() -> result.observe(resultChangeListener));
     }
 
     public MerlinQuery<T> limit(int count) {
