@@ -40,7 +40,7 @@ public class MerlinQuery<T extends MerlinObject> extends Filter {
     public void observe(@NotNull ResultChangeListener<T> resultChangeListener) {
         MerlinResult<T> result = find();
         resultChangeListener.onChange(result);
-        new Handler(Looper.getMainLooper()).post(() -> result.observe(resultChangeListener));
+        result.observe(resultChangeListener);
     }
 
     public MerlinQuery<T> limit(int count) {

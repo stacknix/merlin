@@ -31,7 +31,7 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
     private void dispatchResult(MerlinResult<T> result) {
         if (resultChangeListener != null) {
             Logging.i(TAG, "Dispatching Results");
-            resultChangeListener.onChange(result);
+            new Handler(Looper.getMainLooper()).post(() -> resultChangeListener.onChange(result));
         }
     }
 
