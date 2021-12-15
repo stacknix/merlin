@@ -13,6 +13,7 @@ import io.stacknix.merlin.android.demo.samples.AuthUtilSample
 import io.stacknix.merlin.android.demo.samples.RecyclerAdapterSample
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
+import io.stacknix.merlin.db.ResultChangeListener
 import io.stacknix.merlin.db.annotations.Order
 import io.stacknix.merlin.db.commons.Flag
 import kotlinx.coroutines.Dispatchers.IO
