@@ -96,13 +96,14 @@ Following way, you can read all the record from product model.
 val result = Merlin.where(Product::class.java).find()
 ```
 
-#### Listen
+#### Observe Changes
 Use listen interface for observe live objects change.
 ```kotlin
-result.listen {
+result.observe {
    Log.i("All Count", it.size.toString())
 }
 ```
+> Observe runs on UI thread
 
 #### Delete All
 ```kotlin
@@ -118,10 +119,19 @@ changes where name is Apple only.
 ```kotlin
 val result = Merlin.where(Project::class.java).equal("name", "Apple").find()
 
-result.listen {
+result.observe {
     Log.i("Apple Count", it.size.toString())
 }
+
+OR
+
+Merlin.where(Project::class.java).equal("name", "Apple").observe {
+    Log.i("Apple Count", it.size.toString())
+}
+
 ```
+
+> If observe directly called on query it will notify initial result as well.
 
 
 ## More Documentation Coming Soon... :)
