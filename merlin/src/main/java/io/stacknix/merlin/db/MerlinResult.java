@@ -1,5 +1,8 @@
 package io.stacknix.merlin.db;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,22 +21,32 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
 
     public void listen(ResultChangeListener<T> listener) {
         this.listener = listener;
+        dispatchResult(query.find(), true);
         Merlin.getInstance().listen((tClass, operation) -> {
             if (tClass == query.getObjectClass()) {
-                dispatchResult(query.find());
+                dispatchResult(query.find(), true);
             }
         });
     }
 
     public void observe(ResultChangeListener<T> listener) {
-        dispatchResult(query.find());
-        listen(listener);
+        this.listener = listener;
+        dispatchResult(query.find(), false);
+        Merlin.getInstance().listen((tClass, operation) -> {
+            if (tClass == query.getObjectClass()) {
+                dispatchResult(query.find(), false);
+            }
+        });
     }
 
-    private void dispatchResult(MerlinResult<T> result) {
+    private void dispatchResult(MerlinResult<T> result, boolean mainThread) {
         if (listener != null) {
             Logging.i(TAG, "Dispatching Results");
-            listener.onChange(result);
+            if (!mainThread) {
+                listener.onChange(result);
+            } else {
+                new Handler(Looper.getMainLooper()).post(() -> listener.onChange(result));
+            }
         }
     }
 
@@ -42,7 +55,7 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         Merlin.getInstance().db().delete(query.getObjectClass(), (List<MerlinObject>) this);
     }
 
-    public MerlinQuery<T> getQuery(){
+    public MerlinQuery<T> getQuery() {
         return query;
     }
 }
