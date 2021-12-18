@@ -1,7 +1,8 @@
 package io.stacknix.merlin.db;
 
-import android.os.Handler;
-import android.os.Looper;
+import androidx.lifecycle.MutableLiveData;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         this.query = query;
     }
 
-    public void observe(ResultChangeListener<T> listener) {
+    private void listen(ResultChangeListener<T> listener) {
         this.resultChangeListener = listener;
         Merlin.getInstance().listen((tClass, operation) -> {
             if (tClass == query.getObjectClass()) {
@@ -28,10 +29,16 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         });
     }
 
+    public MutableLiveData<MerlinResult<T>> observe(@NotNull MerlinResult<T> result) {
+        final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(result);
+        result.listen(liveData::postValue);
+        return liveData;
+    }
+
     private void dispatchResult(MerlinResult<T> result) {
         if (resultChangeListener != null) {
             Logging.i(TAG, "Dispatching Results");
-            new Handler(Looper.getMainLooper()).post(() -> resultChangeListener.onChange(result));
+            resultChangeListener.onChange(result);
         }
     }
 

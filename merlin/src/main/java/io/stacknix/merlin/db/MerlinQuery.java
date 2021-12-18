@@ -1,15 +1,9 @@
 package io.stacknix.merlin.db;
 
 
-import android.os.Handler;
-import android.os.Looper;
-
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import io.stacknix.merlin.db.annotations.Order;
-import io.stacknix.merlin.db.annotations.SortKey;
 import io.stacknix.merlin.db.commons.Pair;
 import io.stacknix.merlin.db.queries.Filter;
 
@@ -35,12 +29,6 @@ public class MerlinQuery<T extends MerlinObject> extends Filter {
 
     public MerlinResult<T> find() {
         return Merlin.getInstance().db().search(this);
-    }
-
-    public void observe(@NotNull ResultChangeListener<T> resultChangeListener) {
-        MerlinResult<T> result = find();
-        resultChangeListener.onChange(result);
-        result.observe(resultChangeListener);
     }
 
     public MerlinQuery<T> limit(int count) {
