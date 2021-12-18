@@ -68,6 +68,11 @@ public class JsonRPCService<T extends MerlinObject> extends MerlinService<T, Lon
         return gson.fromJson(data, type);
     }
 
+    @Override
+    public void onException(Exception exception) {
+
+    }
+
     private long getObjectId(@NotNull Map<String, Object> values) throws NullPointerException{
         Object objectId = values.get("id");
         if (objectId != null) {
