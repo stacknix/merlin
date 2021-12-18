@@ -29,9 +29,9 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         });
     }
 
-    public MutableLiveData<MerlinResult<T>> observe(@NotNull MerlinResult<T> result) {
-        final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(result);
-        result.listen(liveData::postValue);
+    public MutableLiveData<MerlinResult<T>> getLiveData() {
+        final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(this);
+        this.listen(liveData::postValue);
         return liveData;
     }
 
