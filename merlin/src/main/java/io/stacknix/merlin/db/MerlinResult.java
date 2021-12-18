@@ -1,5 +1,6 @@
 package io.stacknix.merlin.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         });
     }
 
-    public @NotNull MutableLiveData<MerlinResult<T>> getLiveData() {
+    public @NotNull LiveData<MerlinResult<T>> getLiveData() {
         final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(this);
         this.listen(liveData::postValue);
         return liveData;
