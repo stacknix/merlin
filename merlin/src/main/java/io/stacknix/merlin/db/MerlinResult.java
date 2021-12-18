@@ -20,7 +20,7 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         this.query = query;
     }
 
-    public void observe(ResultChangeListener<T> listener) {
+    private void listen(ResultChangeListener<T> listener) {
         this.resultChangeListener = listener;
         Merlin.getInstance().listen((tClass, operation) -> {
             if (tClass == query.getObjectClass()) {
@@ -31,7 +31,7 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
 
     public @NotNull MutableLiveData<MerlinResult<T>> getLiveData() {
         final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(this);
-        this.observe(liveData::postValue);
+        this.listen(liveData::postValue);
         return liveData;
     }
 
