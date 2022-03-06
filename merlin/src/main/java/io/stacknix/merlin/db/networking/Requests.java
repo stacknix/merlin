@@ -38,7 +38,7 @@ public class Requests {
         HttpUrl.Builder httpUrl = new HttpUrl.Builder()
                 .scheme(scheme.name().toLowerCase())
                 .host(this.host)
-                .addPathSegment(endpoint);
+                .addPathSegments(endpoint);
         for (Map.Entry<String, String> entry : params.entrySet()) {
             httpUrl.addQueryParameter(entry.getKey(), entry.getValue());
         }
