@@ -6,10 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import io.stacknix.merlin.db.DBAdapter;
-import io.stacknix.merlin.db.Merlin;
-import io.stacknix.merlin.db.MerlinObject;
-import io.stacknix.merlin.db.MerlinQuery;
 import io.stacknix.merlin.db.commons.Flag;
 import io.stacknix.merlin.db.commons.RecordNotFound;
 import io.stacknix.merlin.db.commons.ResultCompare;
@@ -28,6 +24,10 @@ public abstract class MerlinService<T extends MerlinObject> {
 
     public Class<T> getObjectClass() {
         return tClass;
+    }
+
+    public Requests getRequests() {
+        return requests;
     }
 
     public abstract T onCreate(T object) throws Exception;
@@ -76,12 +76,8 @@ public abstract class MerlinService<T extends MerlinObject> {
     }
 
     public void delete(@NotNull T object) throws Exception {
-        try {
-            onDelete(object);
-        } catch (RecordNotFound ignored) {
-        } finally {
-            object.delete();
-        }
+        onDelete(object);
+        object.delete();
     }
 
     public synchronized void performSync() throws Exception {

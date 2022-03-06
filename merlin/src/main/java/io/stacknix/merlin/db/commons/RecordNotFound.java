@@ -2,7 +2,7 @@ package io.stacknix.merlin.db.commons;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RecordNotFound extends RuntimeException {
+public class RecordNotFound extends Exception {
 
     public int code;
     @NotNull

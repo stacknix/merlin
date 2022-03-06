@@ -2,8 +2,6 @@ package io.stacknix.merlin.android.demo
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,12 +15,10 @@ import io.stacknix.merlin.android.demo.samples.RecyclerAdapterSample
 import io.stacknix.merlin.db.Merlin
 import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.annotations.Order
-import io.stacknix.merlin.db.commons.Flag
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.util.*
 
 
@@ -43,12 +39,8 @@ class MainActivity : AppCompatActivity() {
             item.save()
 
             GlobalScope.launch(IO) {
-                try {
-                    val service = JsonRPCService(Project::class.java, AuthUtilSample.getClient())
-                    val result = service.create(item)
-                }catch (e: Exception){
-                    // check
-                }
+                val service = JsonRPCService(Project::class.java, AuthUtilSample.getClient())
+                val result = service.create(item)
             }
         }
 
