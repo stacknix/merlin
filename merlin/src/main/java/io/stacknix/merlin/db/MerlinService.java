@@ -24,26 +24,26 @@ public abstract class MerlinService<T extends MerlinObject> {
         return tClass;
     }
 
-    public abstract T onCreate(T object) throws Exception;
+    public abstract T onCreate(T item) throws Exception;
 
-    public abstract T onUpdate(T object) throws Exception;
+    public abstract T onUpdate(T item) throws Exception;
 
     public abstract T onRead(long id) throws Exception;
 
     public abstract List<T> onRead(MerlinQuery<T> query) throws Exception;
 
-    public abstract void onDelete(T object) throws Exception;
+    public abstract void onDelete(T item) throws Exception;
 
-    public @NotNull T create(@NotNull T object) throws Exception {
-        T item = onCreate(object);
-        item.save();
-        return item;
+    public @NotNull T create(@NotNull T item) throws Exception {
+        T object = onCreate(item);
+        object.save();
+        return object;
     }
 
-    public @NotNull T update(@NotNull T object) throws Exception {
-        T item = onUpdate(object);
-        item.save();
-        return item;
+    public @NotNull T update(@NotNull T item) throws Exception {
+        T object = onUpdate(item);
+        object.save();
+        return object;
     }
 
     public @Nullable T read(long id) throws Exception {
@@ -69,9 +69,9 @@ public abstract class MerlinService<T extends MerlinObject> {
         return db.search(query);
     }
 
-    public void delete(@NotNull T object) throws Exception {
-        onDelete(object);
-        object.delete();
+    public void delete(@NotNull T item) throws Exception {
+        onDelete(item);
+        item.delete();
     }
 
     public synchronized void performSync() throws Exception {
