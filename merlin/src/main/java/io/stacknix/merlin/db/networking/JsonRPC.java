@@ -21,11 +21,12 @@ public class JsonRPC {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T call(String method, List<Object> params, long id) throws IOException, HttpException, JsonRPCException {
+    public <T> T call(String method, Long id, Object... params) throws IOException, HttpException, JsonRPCException {
         Map<String, Object> body = new HashMap<>();
         body.put("jsonrpc", "2.0");
         body.put("method", method);
         body.put("params", params);
+        body.put("id", id);
         HttpResponse response = requests.post(endpoint, headers, new HashMap<>(), HttpRequestBody.asJson(body));
         if (response.is_successful) {
             try {
