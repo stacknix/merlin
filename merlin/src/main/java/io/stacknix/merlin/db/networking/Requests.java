@@ -5,12 +5,16 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Map;
 
+import io.stacknix.merlin.db.android.Logging;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class Requests {
 
+    private final String TAG = "Requests";
     private final OkHttpClient.Builder builder;
     private final String host;
     private final HttpScheme scheme;
@@ -19,6 +23,15 @@ public class Requests {
         this.scheme = scheme;
         this.host = host;
         this.builder = new OkHttpClient.Builder();
+        this.builder.addInterceptor(chain -> {
+            Logging.i(TAG, "URL", chain.request().url());
+            Request.@NotNull Builder request = chain.request().newBuilder();
+            return chain.proceed(request.build());
+        });
+    }
+
+    public OkHttpClient.Builder getBuilder() {
+        return builder;
     }
 
     private @NotNull Request.Builder createRequest(@NotNull String endpoint, @NotNull Map<String, String> headers, @NotNull Map<String, String> params) {
