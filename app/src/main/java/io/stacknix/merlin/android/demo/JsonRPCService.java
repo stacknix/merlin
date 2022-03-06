@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +20,17 @@ import io.stacknix.merlin.db.MerlinObject;
 import io.stacknix.merlin.db.MerlinQuery;
 import io.stacknix.merlin.db.MerlinService;
 import io.stacknix.merlin.db.android.Logging;
+import io.stacknix.merlin.db.networking.HttpException;
 import io.stacknix.merlin.db.networking.HttpScheme;
+import io.stacknix.merlin.db.networking.JsonRPC;
+import io.stacknix.merlin.db.networking.JsonRPCException;
 
 public class JsonRPCService<T extends MerlinObject> extends MerlinService<T> {
 
     private final ModelRequest request;
 
     public JsonRPCService(Class<T> tClass, JsonRPCClient client) {
-        super(tClass, HttpScheme.HTTPS, "cloud.stacknix.com");
+        super(tClass);
         this.request = new ModelRequest(client, MerlinObject.getModelName(getObjectClass()));
     }
 

@@ -15,19 +15,13 @@ import io.stacknix.merlin.db.networking.Requests;
 public abstract class MerlinService<T extends MerlinObject> {
 
     private final Class<T> tClass;
-    private final Requests requests;
 
-    public MerlinService(Class<T> tClass, HttpScheme scheme, String host) {
+    public MerlinService(Class<T> tClass) {
         this.tClass = tClass;
-        this.requests = new Requests(scheme, host);
     }
 
     public Class<T> getObjectClass() {
         return tClass;
-    }
-
-    public Requests getRequests() {
-        return requests;
     }
 
     public abstract T onCreate(T object) throws Exception;
