@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import io.stacknix.merlin.db.MerlinObject
@@ -11,17 +12,18 @@ import io.stacknix.merlin.db.MerlinResult
 import io.stacknix.merlin.db.android.DiffUtilWrapper
 
 
-abstract class RecyclerAdapterSample<B : ViewBinding, T : MerlinObject>(private var result: MerlinResult<T>) :
+abstract class RecyclerAdapterSample<B : ViewBinding, T : MerlinObject>(
+    private val lifecycleOwner: LifecycleOwner,
+    private var result: MerlinResult<T>
+) :
     RecyclerView.Adapter<RecyclerAdapterSample.ViewHolder<B>>() {
 
     init {
-        result.listen {
+        result.observe(lifecycleOwner, {
             val dispatcher = DiffUtilWrapper.calculate(result, it)
-            Handler(Looper.getMainLooper()).post {
-                this.result = it
-                dispatcher.dispatchUpdatesTo(this)
-            }
-        }
+            this.result = it
+            dispatcher.dispatchUpdatesTo(this)
+        })
     }
 
     abstract fun getBinding(inflater: LayoutInflater, parent: ViewGroup): B

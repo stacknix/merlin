@@ -1,7 +1,9 @@
 package io.stacknix.merlin.db;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,10 +32,17 @@ public class MerlinResult<T extends MerlinObject> extends ArrayList<T> {
         });
     }
 
+    @Deprecated
     public @NotNull LiveData<MerlinResult<T>> getLiveData() {
         final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(this);
         this.listen(liveData::postValue);
         return liveData;
+    }
+
+    public void observe(LifecycleOwner lifecycleOwner, Observer<MerlinResult<T>> observer){
+        final MutableLiveData<MerlinResult<T>> liveData = new MutableLiveData<>(this);
+        this.listen(liveData::postValue);
+        liveData.observe(lifecycleOwner, observer);
     }
 
     private void dispatchResult(MerlinResult<T> result) {

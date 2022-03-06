@@ -2,14 +2,12 @@ package io.stacknix.merlin.db;
 
 import android.content.Context;
 
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.stacknix.merlin.db.android.SQLiteAdapter;
-import io.stacknix.merlin.db.commons.FieldInfo;
 import io.stacknix.merlin.db.commons.ReflectionFactory;
 
 public class Merlin {
@@ -52,6 +50,7 @@ public class Merlin {
             }
         });
     }
+
 
     public MappingFactory getMappingFactory() {
         return factory;

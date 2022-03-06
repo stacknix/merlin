@@ -10,7 +10,7 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters) :
     override fun doWork(): Result {
         return try {
             JsonRPCService(Project::class.java, getClient())
-                .synchronize(applicationContext)
+                .performSync()
             Result.success()
         } catch (e: Exception) {
             e.printStackTrace()

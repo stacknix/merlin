@@ -15,18 +15,20 @@ import io.stacknix.merlin.db.annotations.Internal;
 import io.stacknix.merlin.db.annotations.Model;
 import io.stacknix.merlin.db.annotations.PrimaryKey;
 import io.stacknix.merlin.db.commons.FieldInfo;
+import io.stacknix.merlin.db.commons.Flag;
 import io.stacknix.merlin.db.commons.MerlinException;
 
 public abstract class MerlinObject {
 
     public static final String TAG = "MerlinObject";
+    public static final String FLAG = "flag";
 
     @PrimaryKey
     public String uuid;
     @ID
     public long id;
     @Internal
-    private int _flag;
+    private String flag;
 
     public static <T extends MerlinObject> @NotNull String getModelName(@NotNull Class<T> tClass) {
         Model modelName = tClass.getAnnotation(Model.class);
@@ -119,12 +121,16 @@ public abstract class MerlinObject {
         return Merlin.getInstance().getMappingFactory();
     }
 
-    public int getFlag() {
-        return this._flag;
+    public Flag getFlag() {
+        return Flag.valueOf(this.flag);
     }
 
-    public void setFlag(int flag) {
-        this._flag = flag;
+    public void setFlag(@NotNull Flag flag) {
+        this.flag = flag.name();
+    }
+
+    public void clearFlag() {
+        this.flag = null;
     }
 
 
